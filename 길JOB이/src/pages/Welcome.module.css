@@ -1,5 +1,5 @@
 .Welcome {
-  background: "#F0F6FF";
+  background: #f0f6ff;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -29,7 +29,7 @@
 .title {
   color: #5b74e6;
   font-family: NanumSquare Neo;
-  font-size: 36px;
+  font-size: 3.6rem;
   font-style: normal;
   font-weight: 800;
   line-height: normal;
@@ -39,7 +39,7 @@
 .intro {
   color: #707070;
   font-family: Pretendard Variable;
-  font-size: 20px;
+  font-size: 2rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -55,7 +55,7 @@
 
   /* 버튼 내 폰트 */
   color: white;
-  font-size: 18px;
+  font-size: 1.8rem;
   font-family: Pretendard Variable;
   font-weight: 600;
   word-wrap: break-word;
@@ -63,6 +63,7 @@
 
 .start_btn:hover {
   background: #3353e0;
+  cursor: pointer;
 }
 
 /* 버튼 클릭 효과 */

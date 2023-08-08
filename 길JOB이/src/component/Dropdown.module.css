@@ -1,0 +1,60 @@
+/* 드롭다운 박스 전체를 감싸는 컨테이너 스타일 */
+.dropdown_container {
+  position: relative;
+  display: inline-block;
+}
+
+/* 드롭다운 버튼 스타일 */
+.drop_btn {
+  width: 760px;
+  height: 70px;
+  border-radius: 20px;
+  background: #f2f4f6;
+  color: #b0b0b0;
+  padding: 10px;
+  font-size: 1.8rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* 드롭다운이 열렸을 때 버튼 스타일 */
+.opened {
+  background-color: #f4f6ff;
+  box-shadow: 0px 3px 10px 0px rgba(85, 85, 85, 0.1);
+}
+
+/* 드롭다운 내용(옵션들) 스타일 (숨길 때 사용됨) */
+.dropdown_content {
+  display: none;
+  position: absolute;
+  width: 760px;
+  max-height: 284px; /* 드롭다운 내용의 최대 높이를 설정 */
+  overflow-y: auto; /* 세로 스크롤이 나타나도록 설정 */
+  margin-top: 16px;
+  border-radius: 20px;
+  background: #f4f6ff;
+  box-shadow: 0px 3px 10px 0px rgba(85, 85, 85, 0.1);
+  font-size: 18px;
+  z-index: 1;
+}
+
+/* 드롭다운 내용의 링크 스타일 */
+.dropdown_content .option {
+  color: black;
+  padding: 16px 20px;
+  text-decoration: none;
+  display: block;
+}
+/* 드롭다운 내용의 링크에 호버 효과 스타일 */
+.dropdown_content .option:hover {
+  background-color: #f1f1f1;
+}
+
+/* 드롭다운 버튼을 클릭했을 때 드롭다운 내용 보이기 */
+.dropdown_container:focus-within .dropdown_content {
+  display: block;
+}
+
+option {
+  background-color: red;
+}
