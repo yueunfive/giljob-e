@@ -1,5 +1,5 @@
 import styles from "./Onboarding.module.css";
-import logo from "../img/Logo_2.png";
+import logo from "../img/logo.png";
 import Dropdown from "../component/Dropdown";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ function Onboarding() {
   let navigate = useNavigate();
 
   // 로고에 적용할 클릭 이벤트 함수
-  const handleOnClick = () => {
+  const goToWelcome = () => {
     navigate("/");
   };
 
@@ -55,11 +55,25 @@ function Onboarding() {
     "제한없음",
   ];
 
-  const [age, setAge] = useState();
+  const [age, setAge] = useState(null);
+
+  // region, education, jobStatus 드롭다운 컴포넌트에서 선택된 옵션을 상태로 관리ㄴ
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedEducation, setSelectedEducation] = useState(null);
+  const [selectedJobStatus, setSelectedJobStatus] = useState(null);
+
+  // "선택완료" 버튼이 활성화되는지 여부를 결정하는 변수
+  const isButtonDisabled =
+    !selectedRegion || !selectedEducation || !selectedJobStatus || !age;
+
+  // 버튼에 적용할 클릭 이벤트 함수
+  const goToHome = () => {
+    navigate("/Home");
+  };
 
   return (
     <div className={styles.Onboarding}>
-      <div className={styles.logo_box} onClick={handleOnClick}>
+      <div className={styles.logo_box} onClick={goToWelcome}>
         <img src={logo} alt="logo" className={styles.logo_img} />
         <h3 className={styles.logo_text}>길JOB이</h3>
       </div>
@@ -71,6 +85,7 @@ function Onboarding() {
               <Dropdown
                 options={regionOptions}
                 defaultOption="지역을 선택해주세요"
+                onSelect={(option) => setSelectedRegion(option)} // 옵션 선택 시 선택한 옵션을 상태로 업데이트
               />
             </div>
             <div className={styles.Onboarding_line}>
@@ -78,6 +93,7 @@ function Onboarding() {
               <Dropdown
                 options={educationOptions}
                 defaultOption="학력을 선택해주세요"
+                onSelect={(option) => setSelectedEducation(option)}
               />
             </div>
             <div className={styles.Onboarding_line}>
@@ -85,6 +101,7 @@ function Onboarding() {
               <Dropdown
                 options={jobStatusOptions}
                 defaultOption="구직 상태를 선택해주세요"
+                onSelect={(option) => setSelectedJobStatus(option)}
               />
             </div>
             <div
@@ -105,7 +122,15 @@ function Onboarding() {
           </div>
         </div>
         <div className={styles.wrapper_bottom}>
-          <button className={styles.Onboarding_btn}>선택완료</button>
+          <button
+            className={`${styles.Onboarding_btn} ${
+              isButtonDisabled ? styles.disabled : ""
+            }`}
+            disabled={isButtonDisabled}
+            onClick={goToHome}
+          >
+            선택완료
+          </button>
         </div>
       </div>
     </div>

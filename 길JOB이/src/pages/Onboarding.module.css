@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   gap: 13px;
-  /* %는 이상하게 나오고 viewpoint로 설정해야 제대로 나온다. (부모의 넓이 & 높이를 그렇게 설정해서 그런가..?) */
   margin-top: 6vh;
   margin-left: 4vw;
   cursor: pointer;
@@ -25,6 +24,7 @@
   font-family: NanumSquare Neo;
   font-weight: 800;
   word-wrap: break-word;
+  padding-top: 5px;
   margin: 0;
 }
 
@@ -109,7 +109,7 @@
   border: none;
   border-radius: 100px;
   color: white;
-  font-size: 18;
+  font-size: 18px;
   font-family: Pretendard Variable;
   font-weight: 600;
 
@@ -125,4 +125,10 @@
 /* 버튼 클릭 효과 */
 .Onboarding_btn:active {
   background: #5b74e6;
+}
+
+/* 버튼 비활성화 */
+.disabled {
+  opacity: 0.5;
+  pointer-events: none; /* 마우스 이벤트를 막아 호버 효과나 클릭 효과가 작동하지 않도록 함 */
 }

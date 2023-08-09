@@ -1,3 +1,41 @@
+.Home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  gap: 64px;
+}
+
+.logo_box {
+  width: 240px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.logo_img {
+  width: 56px;
+}
+
+.logo_text {
+  color: #5b74e6;
+  font-size: 4.15rem;
+  font-family: NanumSquare Neo;
+  font-weight: 800;
+  margin: 0;
+  padding-top: 6px;
+}
+
+.search {
+  position: relative;
+  width: 1080px;
+  height: 70px;
+  z-index: 1000;
+}
+
 .SearchResults {
   width: 1032px;
   height: 660px;
@@ -20,7 +58,6 @@
 .card_box {
   width: 1032px;
   height: 588px;
-
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;

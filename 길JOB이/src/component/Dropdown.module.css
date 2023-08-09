@@ -15,6 +15,17 @@
   font-size: 1.8rem;
   border: none;
   cursor: pointer;
+  text-align: left;
+  padding-left: 30px;
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 옵션이 선택되었을 때 드롭다운 버튼의 스타일 */
+.dropdown_container .drop_btn.selected {
+  color: black;
 }
 
 /* 드롭다운이 열렸을 때 버튼 스타일 */

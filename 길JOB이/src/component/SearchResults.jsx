@@ -1,5 +1,9 @@
-import styles from "./SearchResults.module.css";
+import logo from "../img/logo.png";
 import React, { useState } from "react";
+import styles from "./SearchResults.module.css";
+import AutoComplete from "../component/AutoComplete";
+import Footer from "../component/Footer";
+import { useNavigate } from "react-router-dom";
 
 // 24자 초과할 경우 ..으로 표시
 function cutText(text, maxLength) {
@@ -10,8 +14,18 @@ function cutText(text, maxLength) {
 }
 
 function SearchResults() {
-  const [cards, setCards] = useState([]);
-  // 아마도.. 데이터 받아와서 cards 배열에 넣고 map으로 card 띄우는 고런 느낌으로 구현하면 될 듯..?
+  const options = ["감자", "Apple", "Banana", "Orange", "Pineapple", "Grapes"];
+  const navigate = useNavigate();
+
+  const [clickInputValue, setClickInputValue] = useState(""); // 검색창에 검색한 용어 저장
+
+  const goToHome = () => {
+    navigate("/Home");
+  };
+
+  const goToDetailPage = () => {
+    navigate("/DetailPage");
+  };
 
   // 임시로 배열 & 검색결과로 만들어 봄
   const card = [
@@ -31,19 +45,32 @@ function SearchResults() {
   const [search, setSearch] = useState("창업");
 
   return (
-    <div className={styles.SearchResults}>
-      <div className={styles.search_text}>
-        <h1>
-          <span>'{search}'</span> 검색 결과
-        </h1>
+    <div className={styles.Home}>
+      <div className={styles.logo_box} onClick={goToHome}>
+        <img src={logo} alt="logo" className={styles.logo_img} />
+        <h3 className={styles.logo_text}>길JOB이</h3>
       </div>
-      <div className={styles.card_box}>
-        {card.map((a) => (
-          <div key={a} className={styles.card}>
-            <div className={styles.card_text}>{cutText(a, 24)}</div>
-          </div>
-        ))}
+      <div className={styles.search}>
+        <AutoComplete
+          options={options}
+          setClickInputValue={setClickInputValue}
+        ></AutoComplete>
       </div>
+      <div className={styles.SearchResults}>
+        <div className={styles.search_text}>
+          <h1>
+            <span>'{clickInputValue}'</span> 검색 결과
+          </h1>
+        </div>
+        <div className={styles.card_box}>
+          {card.map((a) => (
+            <div key={a} className={styles.card} onClick={goToDetailPage}>
+              <div className={styles.card_text}>{cutText(a, 24)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
