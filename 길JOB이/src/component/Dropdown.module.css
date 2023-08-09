@@ -51,10 +51,6 @@
 }
 
 /* 드롭다운 버튼을 클릭했을 때 드롭다운 내용 보이기 */
-.dropdown_container:focus-within .dropdown_content {
+.dropdown_container.open .dropdown_content {
   display: block;
-}
-
-option {
-  background-color: red;
 }
