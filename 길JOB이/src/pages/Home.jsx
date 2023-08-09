@@ -11,6 +11,17 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [clickInputValue, setClickInputValue] = useState(""); // 이건 사실 검색결과 창을 위한 state..
+  const [searchZIndex, setSearchZIndex] = useState(1); // 모달창을 열고 닫을때 검색창의 z-index를 조절(안하면 모달창 열어도 검색창 뜸)
+
+  // 모달 열릴 때 z-index 값을 변경
+  const openModal = () => {
+    setSearchZIndex(0);
+  };
+
+  // 모달 닫힐 때 z-index 값을 원래대로 변경
+  const closeModal = () => {
+    setSearchZIndex(1);
+  };
 
   const goToHome = () => {
     navigate("/Home");
@@ -34,7 +45,7 @@ const Home = () => {
         <img src={logo} alt="logo" className={styles.logo_img} />
         <h3 className={styles.logo_text}>길JOB이</h3>
       </div>
-      <div className={styles.search}>
+      <div className={styles.search} style={{ zIndex: searchZIndex }}>
         <AutoComplete
           options={options}
           setClickInputValue={setClickInputValue}
@@ -43,7 +54,7 @@ const Home = () => {
       <div className={styles.recommend}>
         <div className={styles.recotitle}>
           <span>맞춤 일자리 정책 추천</span>
-          <ModalContent />
+          <ModalContent openModal={openModal} closeModal={closeModal} />
         </div>
         <div className={styles.card_box}>
           <div className={styles.card} onClick={goToDetailPage}>

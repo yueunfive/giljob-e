@@ -6,7 +6,7 @@ import cancel from "../img/cancel.png";
 import styles from "./ModalContent.module.css";
 import { useNavigate } from "react-router-dom";
 
-const ModalContent = () => {
+const ModalContent = ({ openModal, closeModal }) => {
   let navigate = useNavigate();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -62,7 +62,13 @@ const ModalContent = () => {
 
   return (
     <div>
-      <button className={styles.filterbutton} onClick={handleModalOpen}>
+      <button
+        className={styles.filterbutton}
+        onClick={() => {
+          handleModalOpen();
+          openModal();
+        }}
+      >
         <img src={filter} className={styles.filtericon} alt="filtericon"></img>
       </button>
       <Modal
@@ -79,7 +85,10 @@ const ModalContent = () => {
             <div className={styles.headerright}>
               <button
                 className={styles.filterx}
-                onClick={() => setModalIsOpen(false)}
+                onClick={() => {
+                  setModalIsOpen(false);
+                  closeModal();
+                }}
               >
                 <img src={cancel} alt="cancel"></img>
               </button>
@@ -132,7 +141,10 @@ const ModalContent = () => {
                 !age ? styles.disabled : ""
               }`}
               disabled={!age}
-              onClick={() => setModalIsOpen(false)}
+              onClick={() => {
+                setModalIsOpen(false);
+                closeModal();
+              }}
             >
               선택완료
             </button>
