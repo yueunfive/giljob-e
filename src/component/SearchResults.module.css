@@ -1,0 +1,89 @@
+.Home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  gap: 64px;
+}
+
+.logo_box {
+  width: 240px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.logo_img {
+  width: 56px;
+}
+
+.logo_text {
+  color: #5b74e6;
+  font-size: 4.15rem;
+  font-family: NanumSquare Neo;
+  font-weight: 800;
+  margin: 0;
+  padding-top: 6px;
+}
+
+.search {
+  position: relative;
+  width: 1080px;
+  height: 70px;
+  z-index: 1000;
+}
+
+.SearchResults {
+  width: 1032px;
+  height: 660px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 29px;
+  background-color: #f0f6ff; /* 구별용 */
+}
+
+.SearchResults h1 {
+  font-size: 36px;
+  margin: 0;
+  height: 43px;
+}
+
+.SearchResults h1 span {
+  color: #5b74e6;
+}
+
+.card_box {
+  width: 1032px;
+  height: 588px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+.card {
+  width: 240px;
+  height: 180px;
+  border-radius: 9.259px;
+  border: 1px solid #f2f4f6;
+  background: white;
+  position: relative;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0px 3px 10px 0px rgba(85, 85, 85, 0.1);
+}
+
+.card_text {
+  width: 200px;
+  height: 42px;
+
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  font-size: 18px;
+}
