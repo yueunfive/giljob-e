@@ -13,9 +13,8 @@ const DetailPage = () => {
 
   return (
     <div>
-      <div className={styles.logo_box} onClick={goToHome}>
-        <img src={logo} alt="logo" className={styles.logo_img} />
-        <h3 className={styles.logo_text}>길JOB이</h3>
+      <div className={styles.logo} onClick={goToHome}>
+        <img src={logo} alt="logo" />
       </div>
       <div className={styles.header}>
         <span className={styles.title}>제목</span>

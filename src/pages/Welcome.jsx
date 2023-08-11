@@ -1,5 +1,5 @@
 import styles from "./Welcome.module.css";
-import logo from "../img/logo.png";
+import logo from "../img/gilbob-e.png";
 import { useNavigate } from "react-router-dom";
 
 function Welcome() {

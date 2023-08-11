@@ -91,17 +91,17 @@ function Onboarding() {
 
   return (
     <div className={styles.Onboarding}>
-      <div className={styles.logo_box} onClick={goToWelcome}>
-        <img src={logo} alt="logo" className={styles.logo_img} />
-        <h3 className={styles.logo_text}>길JOB이</h3>
+      <div className={styles.logo}>
+        <img src={logo} alt="logo" />
       </div>
       <div className={styles.wrapper}>
         <div className={styles.Onboarding_container}>
           <div className={styles.Onboarding_content}>
             <div className={styles.Onboarding_line}>
-              <h4>지역</h4>
+              <span className={styles.bold}>지역</span>
               <Dropdown
                 options={regionOptions}
+                className={styles.Onboarding_dropdown}
                 defaultOption="지역을 선택해주세요"
                 onSelect={(option) => {
                   setSelectedRegion(option);
@@ -113,9 +113,10 @@ function Onboarding() {
               />
             </div>
             <div className={styles.Onboarding_line}>
-              <h4>학력</h4>
+              <span className={styles.bold}>학력</span>
               <Dropdown
                 options={educationOptions}
+                className={styles.Onboarding_dropdown}
                 defaultOption="학력을 선택해주세요"
                 onSelect={(option) => {
                   setSelectedEducation(option);
@@ -127,9 +128,10 @@ function Onboarding() {
               />
             </div>
             <div className={styles.Onboarding_line}>
-              <h4>구직 상태</h4>
+              <span className={styles.bold}>구직 상태</span>
               <Dropdown
                 options={jobStatusOptions}
+                className={styles.Onboarding_dropdown}
                 defaultOption="구직 상태를 선택해주세요"
                 onSelect={(option) => {
                   setSelectedJobStatus(option);
@@ -143,8 +145,9 @@ function Onboarding() {
             <div
               className={`${styles.Onboarding_line} ${styles.age_container}`}
             >
-              <h4>연령</h4>
-              <div>
+              <span className={styles.bold}>연령</span>
+              <div className={styles.age_text}>
+                <span>만</span>
                 <input
                   value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                   onChange={(e) => {
@@ -154,10 +157,9 @@ function Onboarding() {
                       setAge(value);
                     }
                   }}
-                  placeholder="만"
                 />
-                <span>세</span>
               </div>
+              <span className={styles.agefinish}>세</span>
             </div>
           </div>
         </div>
@@ -171,7 +173,7 @@ function Onboarding() {
               goToHome();
             }}
           >
-            선택완료
+            선택 완료
           </button>
         </div>
       </div>

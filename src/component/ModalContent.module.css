@@ -102,23 +102,31 @@ ul {
 }
 
 .Onboarding_line {
-  width: 900px;
-  height: 70px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
+  padding-bottom: 40px;
 }
 
-.Onboarding_line h4 {
+.Onboarding_dropdown {
+  width: 760px;
+  height: 70px;
+  border: none;
+  border-radius: 20px;
+  padding-left: 30px;
+}
+
+.bold {
+  width: 150px;
   font-size: 24px;
+  font-weight: 600;
 }
 
-.age_container {
-  width: 382px;
-}
-
-.age_container input {
-  box-sizing: border-box;
+.age_text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: none;
   width: 210px;
   height: 70px;
   border-radius: 20px;
@@ -127,22 +135,37 @@ ul {
   font-size: 1.8rem;
   border: none;
   cursor: pointer;
+  gap: 20px;
 }
 
-.age_container input::placeholder {
+.age_text span {
+  font-size: 18px;
   color: #b0b0b0;
+}
+
+.agefinish {
+  margin-left: 16px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.age_text input {
+  color: black;
   font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 24px;
+  width: 80px;
+  height: 40px;
+  border: none;
+  outline: none;
+  background-color: #f2f4f6;
+  padding-left: 15px;
 }
 
 .age_container input:focus {
   outline: none;
-  background-color: #f4f6ff;
-}
-
-.age_container span {
-  font-size: 18px;
-  width: 16px;
-  margin-left: 16px;
+  background-color: #f2f4f6;
 }
 
 .wrapper_bottom {

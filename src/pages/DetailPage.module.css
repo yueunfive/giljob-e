@@ -14,29 +14,12 @@ ul {
   padding: 0px;
 }
 
-.logo_box {
+.logo {
   width: 200px;
   height: 48px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin-top: 6vh;
-  margin-left: 4vw;
+  margin-left: 50px;
+  margin-top: 50px;
   cursor: pointer;
-}
-
-.logo_img {
-  width: 48px;
-}
-
-.logo_text {
-  color: #5b74e6;
-  font-size: 3.5rem;
-  font-family: NanumSquare Neo;
-  font-weight: 800;
-  word-wrap: break-word;
-  padding-top: 5px;
-  margin: 0;
 }
 
 .header {

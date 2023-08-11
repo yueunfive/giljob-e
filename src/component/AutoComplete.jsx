@@ -44,6 +44,14 @@ const AutoComplete = ({ options }) => {
     localStorage.setItem("searchText", inputValue);
   };
 
+  // 인풋에 적용할 Enter 키 입력 함수
+  // Enter 입력이 되면 클릭 이벤트 실행
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      goToSearchResults();
+    }
+  };
+
   return (
     <div className={styles.dropdown}>
       <div className={styles.searchbox}>
@@ -53,7 +61,8 @@ const AutoComplete = ({ options }) => {
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={() => setShowDropdown(true)}
-          placeholder="궁금한 일자리 정책을dw 찾아보세요!"
+          onKeyPress={handleOnKeyPress}
+          placeholder="궁금한 일자리 정책을 찾아보세요!"
         />
         <button
           className={styles.search_btn}
