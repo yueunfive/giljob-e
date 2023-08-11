@@ -53,7 +53,7 @@ const AutoComplete = ({ options }) => {
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={() => setShowDropdown(true)}
-          placeholder="궁금한 일자리 정책을 찾아보세요!"
+          placeholder="궁금한 일자리 정책을dw 찾아보세요!"
         />
         <button
           className={styles.search_btn}
