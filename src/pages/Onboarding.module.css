@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f0f6ff;
+  margin: 0px;
+  padding: 0px;
+}
+
+.Onboarding {
+  background: #f0f6ff;
+  padding: 0.1px;
+}
+
+.logo {
+  width: 200px;
+  height: 48px;
+  margin-left: 50px;
+  margin-top: 50px;
+  cursor: pointer;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.Onboarding_container {
+  width: 1012px;
+  height: 528px;
+  background: white;
+  box-shadow: "0px 3px 10px rgba(85, 85, 85, 0.10)";
+  border-radius: 40px;
+  margin: 0 auto;
+  margin-top: 46px;
+}
+
+.Onboarding_content {
+  width: 900px;
+  height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  margin: 64px 56px;
+}
+
+.Onboarding_line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bold {
+  width: 150px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.age_text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: none;
+  width: 210px;
+  height: 70px;
+  border-radius: 20px;
+  background: #f2f4f6;
+  padding: 25px;
+  font-size: 1.8rem;
+  border: none;
+  cursor: pointer;
+  gap: 20px;
+}
+
+.age_text span {
+  font-size: 18px;
+  color: #b0b0b0;
+}
+
+.agefinish {
+  margin-left: 16px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.age_text input {
+  color: black;
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 24px;
+  width: 80px;
+  height: 40px;
+  border: none;
+  outline: none;
+  background-color: #f2f4f6;
+  padding-left: 15px;
+}
+
+.age_container input:focus {
+  outline: none;
+  background-color: #f2f4f6;
+}
+
+.wrapper_bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.Onboarding_btn {
+  width: 180px;
+  height: 60px;
+  background: #5b74e6;
+  border: none;
+  border-radius: 100px;
+  color: white;
+  font-size: 18px;
+  font-family: Pretendard Variable;
+  font-weight: 600;
+
+  margin-top: 48px;
+  margin-bottom: 6.25vh;
+}
+
+.Onboarding_btn:hover {
+  background: #3353e0;
+  cursor: pointer;
+}
+
+/* 버튼 클릭 효과 */
+.Onboarding_btn:active {
+  background: #5b74e6;
+}
+
+/* 버튼 비활성화 */
+.disabled {
+  opacity: 0.5;
+  pointer-events: none; /* 마우스 이벤트를 막아 호버 효과나 클릭 효과가 작동하지 않도록 함 */
+}
