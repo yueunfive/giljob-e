@@ -1,0 +1,53 @@
+.rank {
+  width: 1080px;
+  height: 452px;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  background-color: white;
+  border-radius: 40px;
+  box-shadow: 0px 3px 10px 0px rgba(85, 85, 85, 0.1);
+}
+
+.ranktitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.ranklist {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ranklist ul li {
+  display: flex;
+  flex-direction: row;
+  width: 896px;
+  height: 51px;
+  border-radius: 16px;
+  border: 1px solid var(--gray-1, #f2f4f6);
+  background-color: #f9fafb;
+  margin-bottom: 16px;
+  padding-left: 24px;
+  gap: 24px;
+}
+
+.ranknum {
+  display: flex;
+  align-items: center;
+  color: var(--primary, #5b74e6);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ranklist ul li button {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 400;
+  background-color: #f9fafb;
+  border: none;
+}
