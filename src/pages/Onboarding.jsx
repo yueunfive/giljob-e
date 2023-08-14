@@ -1,11 +1,17 @@
 import styles from "./Onboarding.module.css";
 import logo from "../img/logo.png";
 import Dropdown from "../component/Dropdown";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Onboarding() {
   let navigate = useNavigate();
+
+  // input을 감싸는 div를 클릭했을 때 input으로 포커스 이동하게 하는 기능
+  const inputRef = useRef(null); // 입력란에 대한 ref 생성
+  const handleDivClick = () => {
+    inputRef.current.focus(); // 입력란에 포커스 이동
+  };
 
   // 로고에 적용할 클릭 이벤트 함수
   const goToWelcome = () => {
@@ -15,13 +21,13 @@ function Onboarding() {
   const regionOptions = [
     "전체",
     "서울",
+    "경기",
     "부산",
     "대구",
     "인천",
     "광주",
     "대전",
     "울산",
-    "경기",
     "강원",
     "충북",
     "충남",
@@ -29,30 +35,25 @@ function Onboarding() {
     "전남",
     "경북",
     "경남",
-    "제주",
     "세종",
+    "제주",
   ];
   const educationOptions = [
-    "고졸 미만",
-    "고교 재학",
-    "고졸 예정",
-    "고교 졸업",
-    "대학 재학",
-    "대졸 예정",
-    "대학 졸업",
-    "석∙박사",
-    "제한없음",
+    "고등학교 졸업 미만",
+    "고등학교 졸업",
+    "대학교 재학",
+    "대학교 졸업",
+    "석사/박사",
+    "무관",
   ];
   const jobStatusOptions = [
+    "전체",
+    "취업 준비생",
+    "(예비)창업자",
     "재직자",
     "자영업자",
-    "미취업자",
     "프리랜서",
-    "일용근로자",
-    "(예비)창업자",
-    "단기근로자",
-    "영농종사자",
-    "제한없음",
+    "단기 근로자",
   ];
 
   const [age, setAge] = useState(null);
@@ -91,7 +92,7 @@ function Onboarding() {
 
   return (
     <div className={styles.Onboarding}>
-      <div className={styles.logo}>
+      <div className={styles.logo} onClick={goToWelcome}>
         <img src={logo} alt="logo" />
       </div>
       <div className={styles.wrapper}>
@@ -146,9 +147,10 @@ function Onboarding() {
               className={`${styles.Onboarding_line} ${styles.age_container}`}
             >
               <span className={styles.bold}>연령</span>
-              <div className={styles.age_text}>
+              <div className={styles.age_text} onClick={handleDivClick}>
                 <span>만</span>
                 <input
+                  ref={inputRef}
                   value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                   onChange={(e) => {
                     const value = e.target.value; // 입력 값

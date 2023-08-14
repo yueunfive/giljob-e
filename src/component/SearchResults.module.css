@@ -76,3 +76,25 @@
   top: 20px;
   font-size: 18px;
 }
+
+/* 커스텀 페이지네이션 스타일 */
+.custom_active a {
+  color: #5b74e6;
+}
+
+.custom_page_item {
+  margin: 0 20px;
+  display: inline-block;
+}
+
+.custom_page_link {
+  font-size: 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.custom_page_link:hover {
+  color: #5b74e6;
+}

@@ -3,8 +3,10 @@ import search from "../img/search.png";
 import styles from "./AutoComplete.module.css";
 import { useNavigate } from "react-router-dom";
 
-const AutoComplete = ({ options }) => {
+const AutoComplete = () => {
   let navigate = useNavigate();
+
+  const options = ["감자", "Apple", "Banana", "Orange", "Pineapple", "Grapes"];
 
   const [inputValue, setInputValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -36,6 +38,7 @@ const AutoComplete = ({ options }) => {
   const goToSearchResults = () => {
     if (inputValue.length > 0) {
       navigate("/SearchResults");
+      window.location.href = "/SearchResults"; // SearchResults 페이지로 이동할 때 새로고침(이렇게 해야 Home에서 SearchResult로 갈 때 바로 결과값 뜸)
     }
   };
 
@@ -49,6 +52,7 @@ const AutoComplete = ({ options }) => {
   const handleOnKeyPress = (e) => {
     if (e.key === "Enter") {
       goToSearchResults();
+      handleSearch();
     }
   };
 

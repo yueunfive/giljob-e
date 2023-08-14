@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import Dropdown from "./Dropdown";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import filter from "../img/filter.png";
 import cancel from "../img/cancel.png";
 import styles from "./ModalContent.module.css";
@@ -8,6 +8,12 @@ import { useNavigate } from "react-router-dom";
 
 const ModalContent = ({ openModal, closeModal }) => {
   let navigate = useNavigate();
+
+  // input을 감싸는 div를 클릭했을 때 input으로 포커스 이동하게 하는 기능
+  const inputRef = useRef(null); // 입력란에 대한 ref 생성
+  const handleDivClick = () => {
+    inputRef.current.focus(); // 입력란에 포커스 이동
+  };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -18,13 +24,13 @@ const ModalContent = ({ openModal, closeModal }) => {
   const regionOptions = [
     "전체",
     "서울",
+    "경기",
     "부산",
     "대구",
     "인천",
     "광주",
     "대전",
     "울산",
-    "경기",
     "강원",
     "충북",
     "충남",
@@ -32,30 +38,25 @@ const ModalContent = ({ openModal, closeModal }) => {
     "전남",
     "경북",
     "경남",
-    "제주",
     "세종",
+    "제주",
   ];
   const educationOptions = [
-    "고졸 미만",
-    "고교 재학",
-    "고졸 예정",
-    "고교 졸업",
-    "대학 재학",
-    "대졸 예정",
-    "대학 졸업",
-    "석∙박사",
-    "제한없음",
+    "고등학교 졸업 미만",
+    "고등학교 졸업",
+    "대학교 재학",
+    "대학교 졸업",
+    "석사/박사",
+    "무관",
   ];
   const jobStatusOptions = [
+    "전체",
+    "취업 준비생",
+    "(예비)창업자",
     "재직자",
     "자영업자",
-    "미취업자",
     "프리랜서",
-    "일용근로자",
-    "(예비)창업자",
-    "단기근로자",
-    "영농종사자",
-    "제한없음",
+    "단기 근로자",
   ];
 
   const [age, setAge] = useState(null);
@@ -67,10 +68,12 @@ const ModalContent = ({ openModal, closeModal }) => {
     jobStatusOptions[0]
   );
 
-  // Modal이 열릴 때마다 저장된 사용자 정보를 가져와서 미리 설정
+  // 로컬 스토리지에서 사용자 정보를 가져옴
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo) {
+      // Modal이 열릴 때마다 저장된 사용자 정보를 가져와서 미리 설정
       setSelectedRegion(userInfo.region || regionOptions[0]);
       setSelectedEducation(userInfo.education || educationOptions[0]);
       setSelectedJobStatus(userInfo.jobStatus || jobStatusOptions[0]);
@@ -143,6 +146,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={regionOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="지역을 선택해주세요"
+                  initialSelected={selectedRegion} // 초기 선택 값 전달
                   onSelect={(option) => {
                     setSelectedRegion(option);
                     setUserData((prevUserData) => ({
@@ -158,6 +162,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={educationOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="학력을 선택해주세요"
+                  initialSelected={selectedEducation} // 초기 선택 값 전달
                   onSelect={(option) => {
                     setSelectedEducation(option);
                     setUserData((prevUserData) => ({
@@ -173,6 +178,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={jobStatusOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="구직 상태를 선택해주세요"
+                  initialSelected={selectedJobStatus} // 초기 선택 값 전달
                   onSelect={(option) => {
                     setSelectedJobStatus(option);
                     setUserData((prevUserData) => ({
@@ -186,9 +192,10 @@ const ModalContent = ({ openModal, closeModal }) => {
                 className={`${styles.Onboarding_line} ${styles.age_container}`}
               >
                 <span className={styles.bold}>연령</span>
-                <div className={styles.age_text}>
+                <div className={styles.age_text} onClick={handleDivClick}>
                   <span>만</span>
                   <input
+                    ref={inputRef}
                     value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                     onChange={(e) => {
                       const value = e.target.value; // 입력 값
