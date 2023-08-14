@@ -83,15 +83,17 @@ const Home = () => {
   // 로컬 스토리지에서 사용자 정보를 가져옴
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
+  // 초기에 로컬 스토리지에서 사용자 정보를 가져오면서 translate를 시켜줘야 됨
   const [translatedData, setTranslatedData] = useState({
-    region: "",
-    education: "",
-    jobStatus: "",
-    age: 0,
+    region: translationMap[userInfo.region],
+    education: translationMap[userInfo.education],
+    jobStatus: translationMap[userInfo.jobStatus],
+    age: parseInt(userInfo.age),
   });
 
-  // 로컬 스토리지에서 가져온 값을 초기에 translatedData로 설정
+  // 모달을 열고 닫을 때 로컬 스토리지에서 가져온 값을 translatedData로 설정
   useEffect(() => {
+    console.log(userInfo);
     if (userInfo) {
       const translatedRegion = translationMap[userInfo.region];
       const translatedEducation = translationMap[userInfo.education];
@@ -105,7 +107,7 @@ const Home = () => {
         age: userAge,
       });
     }
-  }, [userInfo]);
+  }, [searchZIndex]);
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = () => {
@@ -116,18 +118,17 @@ const Home = () => {
   const fetchPolicies = async () => {
     try {
       const response = await axios.get(constructApiUrl()); // API 요청
-
+      console.log("Translated Data:", translatedData); // 콘솔창에 띄어 보니까 데이터는 잘 들어갔고 요청 URL도 맞는데 왜ㅜ
+      console.log(constructApiUrl());
       setPolicyData(response.data); // policyData 업데이트
     } catch (error) {
       console.error("Error fetching policies:", error);
-      console.log("Translated Data:", translatedData); // 콘솔창에 띄어 보니까 데이터는 잘 들어갔고 요청 URL도 맞는데 왜ㅜ
-      console.log(constructApiUrl());
     }
   };
 
   // translatedData가 변경될 때에만 API를 호출
   useEffect(() => {
-    if (userInfo) {
+    if (translatedData.region) {
       fetchPolicies(); // API 호출
     }
   }, [translatedData]);
