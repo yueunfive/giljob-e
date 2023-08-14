@@ -1,47 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import search from "../img/search.png";
 import styles from "./AutoComplete.module.css";
 import { useNavigate } from "react-router-dom";
 
 const AutoComplete = ({ options }) => {
   let navigate = useNavigate();
+  const inputRef = useRef(null);
 
   const [inputValue, setInputValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
 
-    const filtered = options.filter((option) =>
-      option.toLowerCase().startsWith(value.toLowerCase())
-    );
-
+    const filtered = value
+      ? options.filter((option) =>
+          option.toLowerCase().includes(value.toLowerCase())
+        )
+      : [];
     setFilteredOptions(filtered);
-    setShowDropdown(filtered.length > 0);
   };
 
   const handleSelectOption = (option) => {
     setInputValue(option);
     setFilteredOptions([]);
-    setShowDropdown(false);
+    inputRef.current.focus();
   };
 
   const handleBlur = () => {
-    setShowDropdown(false);
+    setTimeout(() => {
+      setFilteredOptions([]);
+    }, 200);
   };
 
-  // 버튼에 적용할 클릭 이벤트 함수
   const goToSearchResults = () => {
     if (inputValue.length > 0) {
       navigate("/SearchResults");
     }
   };
 
-  // 검색창에 검색한 텍스트를 로컬 스토리지에 저장 : 홈 페이지에서 저장하고 검색 결과 페이지에서 불러올 수 있음
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // 기본 엔터 키 동작 막기
+      goToSearchResults();
+      handleSearch();
+      setFilteredOptions([]);
+    }
+  };
+
   const handleSearch = () => {
     localStorage.setItem("searchText", inputValue);
+  };
+
+  // 입력값과 겹치는 부분을 강조하여 표시하는 함수
+  const highlightMatchingText = (text) => {
+    const index = text.toLowerCase().indexOf(inputValue.toLowerCase());
+    if (index === -1) {
+      return text;
+    }
+
+    const before = text.substring(0, index);
+    const match = text.substring(index, index + inputValue.length);
+    const after = text.substring(index + inputValue.length);
+
+    return (
+      <>
+        {before}
+        <strong className={styles.highlight}>{match}</strong>
+        {after}
+      </>
+    );
   };
 
   return (
@@ -49,10 +78,12 @@ const AutoComplete = ({ options }) => {
       <div className={styles.searchbox}>
         <input
           type="text"
+          ref={inputRef}
           value={inputValue}
           onChange={handleChange}
           onBlur={handleBlur}
-          onFocus={() => setShowDropdown(true)}
+          onFocus={() => setFilteredOptions(filteredOptions.length > 0)}
+          onKeyDown={handleKeyDown}
           placeholder="궁금한 일자리 정책을 찾아보세요!"
         />
         <button
@@ -65,27 +96,17 @@ const AutoComplete = ({ options }) => {
           <img src={search} className={styles.searchicon} alt="searchicon" />
         </button>
       </div>
-      {showDropdown && inputValue && (
+      {filteredOptions.length > 0 && (
         <ul className={styles.dropdownbox}>
-          {filteredOptions.map((option) => {
-            const startIndex = option
-              .toLowerCase()
-              .indexOf(inputValue.toLowerCase());
-            const endIndex = startIndex + inputValue.length;
-            return (
-              <li key={option} onClick={() => handleSelectOption(option)}>
-                {startIndex !== -1 ? (
-                  <span className={styles.dropdowntext}>
-                    {option.slice(0, startIndex)}
-                    <strong>{option.slice(startIndex, endIndex)}</strong>
-                    {option.slice(endIndex)}
-                  </span>
-                ) : (
-                  option
-                )}
-              </li>
-            );
-          })}
+          {filteredOptions.map((option) => (
+            <li
+              key={option}
+              onClick={() => handleSelectOption(option)}
+              className={styles.dropdowntext}
+            >
+              {highlightMatchingText(option)}
+            </li>
+          ))}
         </ul>
       )}
     </div>

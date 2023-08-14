@@ -1,5 +1,6 @@
 import logo from "../img/logo.png";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "./Home.module.css";
 import ModalContent from "../component/ModalContent";
 import AutoComplete from "../component/AutoComplete";
@@ -7,10 +8,64 @@ import Footer from "../component/Footer";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const options = ["감자", "Apple", "Banana", "Orange", "Pineapple", "Grapes"];
+  const [options, setOptions] = useState([]);
+  const [rankData, setRankData] = useState([]);
+
   const navigate = useNavigate();
 
   const [searchZIndex, setSearchZIndex] = useState(1); // 모달창을 열고 닫을때 검색창의 z-index를 조절(안하면 모달창 열어도 검색창 뜸)
+
+  useEffect(() => {
+    // API 요청
+    const apiUrl = "http://52.79.114.100/api/policies/rank?pageSize=5";
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        // API에서 받아온 데이터 중에서 이름(name) 정보와 bizid를 추출하여 rankData에 설정
+        const newRankData = response.data.map((item) => ({
+          name: item.name,
+          bizId: item.bizId,
+        }));
+        setRankData(newRankData);
+      })
+      .catch((error) => {
+        console.error("Error fetching rank data:", error);
+      });
+  }, []); // 빈 배열을 넣어 한 번만 호출되도록 설정
+
+  // 정책 상세 페이지로 이동
+  const goToDetailPage = (bizId) => {
+    // 해당 정책의 bizid를 사용하여 DetailPage로 이동
+    navigate(`/DetailPage/${bizId}`);
+  };
+
+  useEffect(() => {
+    const apiUrl = "http://52.79.114.100/api/policies?pageSize=10";
+    const params = {
+      age: null,
+      education: null,
+      jobStatus: null,
+      keyword: null,
+      pageNumber: null,
+      pageSize: null,
+      residence: null,
+    };
+
+    axios
+      .get(apiUrl, { params })
+      .then((response) => {
+        const newOptions = response.data.content.map((item) => item.name);
+        setOptions(newOptions);
+      })
+      .catch((error) => {
+        console.error("Error fetching data from API:", error);
+      });
+  }, []);
+
+  const handleCardClick = (bizId) => {
+    goToDetailPage(bizId);
+  };
 
   // 모달 열릴 때 z-index 값을 변경
   const openModal = () => {
@@ -24,10 +79,6 @@ const Home = () => {
 
   const goToHome = () => {
     navigate("/Home");
-  };
-
-  const goToDetailPage = () => {
-    navigate("/DetailPage");
   };
 
   // 24자 초과할 경우 ..으로 표시
@@ -52,26 +103,15 @@ const Home = () => {
           <ModalContent openModal={openModal} closeModal={closeModal} />
         </div>
         <div className={styles.card_box}>
-          <div className={styles.card} onClick={goToDetailPage}>
-            <div className={styles.card_text}>
-              {cutText("청년전용창업자금(창업기반지원자금)", 24)}
+          {rankData.map((policy, index) => (
+            <div
+              key={index}
+              className={styles.card}
+              onClick={() => handleCardClick(policy.bizId)}
+            >
+              <div className={styles.card_text}>{cutText(policy.name, 24)}</div>
             </div>
-          </div>
-          <div className={styles.card} onClick={goToDetailPage}>
-            <div className={styles.card_text}>
-              {cutText("청년전용창업자금(창업기반지원자금)", 24)}
-            </div>
-          </div>
-          <div className={styles.card} onClick={goToDetailPage}>
-            <div className={styles.card_text}>
-              {cutText("청년전용창업자금(창업기반지원자금)", 24)}
-            </div>
-          </div>
-          <div className={styles.card} onClick={goToDetailPage}>
-            <div className={styles.card_text}>
-              {cutText("청년전용창업자금(창업기반지원자금)", 24)}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       <div className={styles.rank}>
@@ -80,26 +120,19 @@ const Home = () => {
         </div>
         <div className={styles.ranklist}>
           <ul>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>1</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>2</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>3</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>4</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>5</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
+            {/* rankData를 이용하여 정책 순위 리스트 생성 */}
+            {rankData.map((policy, index) => (
+              <li key={index}>
+                <span className={styles.ranknum}>{index + 1}</span>
+                {/* 정책 이름 버튼을 클릭할 때 해당 정책의 bizid를 전달 */}
+                <button
+                  className={styles.jobtitle}
+                  onClick={() => goToDetailPage(policy.bizId)}
+                >
+                  {policy.name}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

@@ -38,7 +38,7 @@ ul {
   position: relative;
   width: 1080px;
   height: 70px;
-  z-index: 2;
+  z-index: 999;
 }
 
 .recommend {
@@ -84,10 +84,8 @@ ul {
 .card_text {
   width: 200px;
   height: 42px;
-
   position: absolute;
-  left: 20px;
-  top: 20px;
+  padding: 20px;
   font-size: 18px;
 }
 
@@ -143,6 +141,15 @@ ul {
   font-weight: 400;
   background-color: #f9fafb;
   border: none;
+}
+
+.jobtitle {
+  cursor: pointer;
+}
+
+.jobtitle:hover {
+  background-color: #f0f6ff;
+  cursor: pointer;
 }
 
 .Modal {

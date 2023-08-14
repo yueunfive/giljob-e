@@ -3,16 +3,18 @@ import logo from "../img/logo.png";
 import Dropdown from "../component/Dropdown";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserData } from "../component/UserDataContext";
 
 function Onboarding() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const { userData, setUserData } = useUserData();
 
   // 로고에 적용할 클릭 이벤트 함수
   const goToWelcome = () => {
     navigate("/");
   };
 
-  const regionOptions = [
+  const residenceOptions = [
     "전체",
     "서울",
     "부산",
@@ -58,29 +60,37 @@ function Onboarding() {
   const [age, setAge] = useState(null);
 
   // region, education, jobStatus 드롭다운 컴포넌트에서 선택된 옵션을 상태로 관리
-  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedResidence, setSelectedResidence] = useState(null);
   const [selectedEducation, setSelectedEducation] = useState(null);
   const [selectedJobStatus, setSelectedJobStatus] = useState(null);
 
+  // 로컬 스토리지에서 사용자 정보 가져와서 초기화
+  useEffect(() => {
+    const storedUserData = JSON.parse(localStorage.getItem("userInfo"));
+    if (storedUserData) {
+      setSelectedResidence(storedUserData.residence);
+      setSelectedEducation(storedUserData.education);
+      setSelectedJobStatus(storedUserData.jobStatus);
+      setAge(storedUserData.age);
+    }
+  }, []);
+
   // "선택완료" 버튼이 활성화되는지 여부를 결정하는 변수
   const isButtonDisabled =
-    !selectedRegion || !selectedEducation || !selectedJobStatus || !age;
-
-  //  Onboarding 컴포넌트에서 선택한 정보를 userData 상태로 저장
-  const [userData, setUserData] = useState({
-    region: "",
-    education: "",
-    jobStatus: "",
-    age: null,
-  });
+    !selectedResidence || !selectedEducation || !selectedJobStatus || !age;
 
   // 버튼 클릭 : localStorage에 사용자 정보 저장 후 '홈' 페이지로 이동
   const goToHome = () => {
-    // age 값을 userData에 저장
     const updatedUserData = {
       ...userData,
+      residence: selectedResidence,
+      education: selectedEducation,
+      jobStatus: selectedJobStatus,
       age: age,
     };
+
+    // 사용자 정보 업데이트
+    setUserData(updatedUserData);
 
     // userData를 업데이트한 후 localStorage에 저장
     localStorage.setItem("userInfo", JSON.stringify(updatedUserData));
@@ -100,14 +110,14 @@ function Onboarding() {
             <div className={styles.Onboarding_line}>
               <span className={styles.bold}>지역</span>
               <Dropdown
-                options={regionOptions}
+                options={residenceOptions}
                 className={styles.Onboarding_dropdown}
                 defaultOption="지역을 선택해주세요"
                 onSelect={(option) => {
-                  setSelectedRegion(option);
+                  setSelectedResidence(option);
                   setUserData((prevUserData) => ({
                     ...prevUserData,
-                    region: option,
+                    residence: option,
                   }));
                 }} // 옵션 선택 시 선택한 옵션을 상태로 업데이트
               />
