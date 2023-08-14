@@ -80,58 +80,38 @@ const Home = () => {
     "단기 근로자": "TEMPORARY_WORKER",
   };
 
-  // 로컬 스토리지에서 사용자 정보를 가져옴
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  // 초기에 로컬 스토리지에서 사용자 정보를 가져오면서 translate를 시켜줘야 됨
-  const [translatedData, setTranslatedData] = useState({
-    region: translationMap[userInfo.region],
-    education: translationMap[userInfo.education],
-    jobStatus: translationMap[userInfo.jobStatus],
-    age: parseInt(userInfo.age),
-  });
-
-  // 모달을 열고 닫을 때 로컬 스토리지에서 가져온 값을 translatedData로 설정
-  useEffect(() => {
-    console.log(userInfo);
-    if (userInfo) {
-      const translatedRegion = translationMap[userInfo.region];
-      const translatedEducation = translationMap[userInfo.education];
-      const translatedJobStatus = translationMap[userInfo.jobStatus];
-      const userAge = parseInt(userInfo.age);
-
-      setTranslatedData({
-        region: translatedRegion,
-        education: translatedEducation,
-        jobStatus: translatedJobStatus,
-        age: userAge,
-      });
-    }
-  }, [searchZIndex]);
-
   // 맞춤 추천을 위한 API 요청 URL 생성
-  const constructApiUrl = () => {
-    return `http://52.79.114.100/api/policies?age=${translatedData.age}&education=${translatedData.education}&jobStatus=${translatedData.jobStatus}&pageNumber=0&pageSize=4&residence=${translatedData.region}`;
+  const constructApiUrl = (tmpData) => {
+    return `http://52.79.114.100/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의
-  const fetchPolicies = async () => {
-    try {
-      const response = await axios.get(constructApiUrl()); // API 요청
-      console.log("Translated Data:", translatedData); // 콘솔창에 띄어 보니까 데이터는 잘 들어갔고 요청 URL도 맞는데 왜ㅜ
-      console.log(constructApiUrl());
-      setPolicyData(response.data); // policyData 업데이트
-    } catch (error) {
-      console.error("Error fetching policies:", error);
+  const fetchPolicies = (tmpData) => {
+    axios
+      .get(constructApiUrl(tmpData))
+      .then((res) => {
+        console.log(res);
+        setPolicyData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // 로컬 스토리지에서 사용자 정보를 가져옴
+  const getData = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")); //이건 어차피 알아서 받아와지는거 굳이 상태처리할필요없음
+
+    if (userInfo) {
+      const tmpData = {
+        region: translationMap[userInfo.region],
+        education: translationMap[userInfo.education],
+        jobStatus: translationMap[userInfo.jobStatus],
+        age: parseInt(userInfo.age),
+      };
+      fetchPolicies(tmpData); //비동기 await~~해서 위에 로컬스토리지에서 받아온 객체 넣어줌
     }
   };
 
-  // translatedData가 변경될 때에만 API를 호출
-  useEffect(() => {
-    if (translatedData.region) {
-      fetchPolicies(); // API 호출
-    }
-  }, [translatedData]);
+  useEffect(getData, []);
 
   return (
     <div className={styles.Home}>
@@ -144,7 +124,11 @@ const Home = () => {
       <div className={styles.recommend}>
         <div className={styles.recotitle}>
           <span>맞춤 일자리 정책 추천</span>
-          <ModalContent openModal={openModal} closeModal={closeModal} />
+          <ModalContent
+            openModal={openModal}
+            closeModal={closeModal}
+            getData={getData} // ModalContent에 props로 getData 함수 물려주기!
+          />
         </div>
         {/* 배열 매핑으로 맞춤 추천 최종 구현!*/}
         <div className={styles.card_box}>

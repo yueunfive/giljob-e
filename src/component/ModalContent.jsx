@@ -1,3 +1,5 @@
+// ModalContent.jsx
+
 import Modal from "react-modal";
 import Dropdown from "./Dropdown";
 import React, { useState, useEffect, useRef } from "react";
@@ -6,7 +8,8 @@ import cancel from "../img/cancel.png";
 import styles from "./ModalContent.module.css";
 import { useNavigate } from "react-router-dom";
 
-const ModalContent = ({ openModal, closeModal }) => {
+const ModalContent = ({ openModal, closeModal, getData }) => {
+  //모달 콘테이너에서 getData를 prop으로 받았지? 이 함수는 비동기함수이고, 얘 내부를 까보면
   let navigate = useNavigate();
 
   // input을 감싸는 div를 클릭했을 때 input으로 포커스 이동하게 하는 기능
@@ -90,7 +93,7 @@ const ModalContent = ({ openModal, closeModal }) => {
   });
 
   // 버튼 클릭 : localStorage에 사용자 정보 저장 후 '홈' 페이지로 이동
-  const goToHome = () => {
+  const goToHome = async () => {
     // age 값을 userData에 저장
     const updatedUserData = {
       ...userData,
@@ -100,8 +103,12 @@ const ModalContent = ({ openModal, closeModal }) => {
     // userData를 업데이트한 후 localStorage에 저장
     localStorage.setItem("userInfo", JSON.stringify(updatedUserData));
 
-    // navigate 이동
-    navigate("/Home");
+    try {
+      getData(); //어차피 여기 안에서 로컬스토리지 값 가져오니까 새로운 데이터로 뭔가 받아서 policyData에 넣어줌
+      navigate("/Home"); //통신 성공하면 Home으로 이동
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
