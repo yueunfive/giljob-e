@@ -130,7 +130,7 @@ function Onboarding() {
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = (tmpData) => {
-    return `http://52.79.114.100/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
+    return `http://54.180.36.240/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의
