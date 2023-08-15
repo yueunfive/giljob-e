@@ -77,7 +77,7 @@ const AutoComplete = () => {
   };
 
   useEffect(() => {
-    const defaultURL = "http://54.180.36.240/api/policies";
+    const defaultURL = "https://www.giljob-e.shop/api/policies";
     const params = {
       age: null,
       education: null,
@@ -91,7 +91,7 @@ const AutoComplete = () => {
       .get(defaultURL)
       .then((response) => {
         const totalElements = response.data.totalElements;
-        const apiUrl = `http://54.180.36.240/api/policies?pageSize=${totalElements}`;
+        const apiUrl = `https://www.giljob-e.shop/api/policies?pageSize=${totalElements}`;
         console.log(apiUrl);
         axios
           .get(apiUrl, { params })

@@ -37,7 +37,7 @@ function SearchResults() {
 
   // 검색 결과를 위한 API 요청 URL 생성
   const constructApiUrl = () => {
-    return `http://54.180.36.240/api/policies?keyword=${searchText}&pageNumber=${
+    return `https://www.giljob-e.shop/api/policies?keyword=${searchText}&pageNumber=${
       activePage - 1
     }&pageSize=${itemsPerPage}`;
   };

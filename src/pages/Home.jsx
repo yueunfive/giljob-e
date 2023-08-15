@@ -23,7 +23,7 @@ const Home = () => {
 
   useEffect(() => {
     // API 요청
-    const apiUrl = "http://54.180.36.240/api/policies/rank?pageSize=5";
+    const apiUrl = "https://www.giljob-e.shop/api/policies/rank?pageSize=5";
 
     axios
       .get(apiUrl)
@@ -104,7 +104,7 @@ const Home = () => {
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = (tmpData) => {
-    return `http://54.180.36.240/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
+    return `https://www.giljob-e.shop/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의

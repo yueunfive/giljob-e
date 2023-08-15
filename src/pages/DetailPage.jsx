@@ -13,7 +13,7 @@ const DetailPage = () => {
   const [detailInfo, setDetailInfo] = useState(null);
 
   useEffect(() => {
-    const apiUrl = `http://54.180.36.240/api/policies/${bizId}`;
+    const apiUrl = `https://www.giljob-e.shop/api/policies/${bizId}`;
 
     axios
       .get(apiUrl)
