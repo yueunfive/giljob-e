@@ -1,43 +1,36 @@
 import Modal from "react-modal";
 import Dropdown from "./Dropdown";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import filter from "../img/filter.png";
 import cancel from "../img/cancel.png";
 import styles from "./ModalContent.module.css";
 import { useNavigate } from "react-router-dom";
-import { useUserData } from "../component/UserDataContext";
 
-const ModalContent = ({ openModal, closeModal }) => {
-  const { userData, setUserData } = useUserData();
-  const [options, setOptions] = useState([]);
-  const navigate = useNavigate();
+const ModalContent = ({ openModal, closeModal, getData }) => {
+  let navigate = useNavigate();
+
+  // input을 감싸는 div를 클릭했을 때 input으로 포커스 이동하게 하는 기능
+  const inputRef = useRef(null); // 입력란에 대한 ref 생성
+  const handleDivClick = () => {
+    inputRef.current.focus(); // 입력란에 포커스 이동
+  };
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleModalOpen = () => {
-    // 모달 열릴 때 로컬 스토리지에서 값을 가져와서 모달 내의 상태를 초기화
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) {
-      setSelectedResidence(userInfo.residence || residenceOptions[0]);
-      setSelectedEducation(userInfo.education || educationOptions[0]);
-      setSelectedJobStatus(userInfo.jobStatus || jobStatusOptions[0]);
-      setAge(userInfo.age);
-    }
-
-    // 모달 열기
     setModalIsOpen(true);
   };
 
-  const residenceOptions = [
+  const regionOptions = [
     "전체",
     "서울",
+    "경기",
     "부산",
     "대구",
     "인천",
     "광주",
     "대전",
     "울산",
-    "경기",
     "강원",
     "충북",
     "충남",
@@ -45,36 +38,29 @@ const ModalContent = ({ openModal, closeModal }) => {
     "전남",
     "경북",
     "경남",
-    "제주",
     "세종",
+    "제주",
   ];
   const educationOptions = [
-    "고졸 미만",
-    "고교 재학",
-    "고졸 예정",
-    "고교 졸업",
-    "대학 재학",
-    "대졸 예정",
-    "대학 졸업",
-    "석∙박사",
-    "제한없음",
+    "고등학교 졸업 미만",
+    "고등학교 졸업",
+    "대학교 재학",
+    "대학교 졸업",
+    "석사/박사",
+    "무관",
   ];
   const jobStatusOptions = [
+    "전체",
+    "취업 준비생",
+    "(예비)창업자",
     "재직자",
     "자영업자",
-    "미취업자",
     "프리랜서",
-    "일용근로자",
-    "(예비)창업자",
-    "단기근로자",
-    "영농종사자",
-    "제한없음",
+    "단기 근로자",
   ];
 
   const [age, setAge] = useState(null);
-  const [selectedResidence, setSelectedResidence] = useState(
-    residenceOptions[0]
-  );
+  const [selectedRegion, setSelectedRegion] = useState(regionOptions[0]);
   const [selectedEducation, setSelectedEducation] = useState(
     educationOptions[0]
   );
@@ -82,35 +68,43 @@ const ModalContent = ({ openModal, closeModal }) => {
     jobStatusOptions[0]
   );
 
-  // "선택 완료" 버튼 클릭 시 호출되는 함수
-  const handleFilterSubmit = async () => {
+  // 로컬 스토리지에서 사용자 정보를 가져옴
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    if (userInfo) {
+      // Modal이 열릴 때마다 저장된 사용자 정보를 가져와서 미리 설정
+      setSelectedRegion(userInfo.region || regionOptions[0]);
+      setSelectedEducation(userInfo.education || educationOptions[0]);
+      setSelectedJobStatus(userInfo.jobStatus || jobStatusOptions[0]);
+      setAge(userInfo.age);
+    }
+  }, []);
+
+  //  Onboarding 컴포넌트에서 선택한 정보를 userData 상태로 저장(userData의 초기 값을 localStorage 정보로 교체!)
+  const [userData, setUserData] = useState({
+    region: selectedRegion,
+    education: selectedEducation,
+    jobStatus: selectedJobStatus,
+    age: age,
+  });
+
+  // 버튼 클릭 : localStorage에 사용자 정보 저장 후 '홈' 페이지로 이동
+  const goToHome = async () => {
+    // age 값을 userData에 저장
+    const updatedUserData = {
+      ...userData,
+      age: age,
+    };
+
+    // userData를 업데이트한 후 localStorage에 저장
+    localStorage.setItem("userInfo", JSON.stringify(updatedUserData));
+
     try {
-      // 필터링 정보
-      const filters = {
-        residence: selectedResidence,
-        education: selectedEducation,
-        jobStatus: selectedJobStatus,
-        age: age,
-      };
-
-      // API 요청을 위한 URL과 쿼리스트링 생성
-      const apiUrl = `http://52.79.114.100/api/policies?residence=${filters.residence}&education=${filters.education}&jobStatus=${filters.jobStatus}&age=${filters.age}`;
-
-      // API 요청
-      const response = await axios.get(apiUrl);
-
-      // API에서 받아온 데이터 중에서 이름(name) 정보 추출
-      const newOptions = response.data.content.map((item) => item.name);
-
-      // 추천 정책 리스트 업데이트
-      setOptions(newOptions);
-
-      // 모달 닫기
-      closeModal();
-
-      navigate("/Home");
-    } catch (error) {
-      console.error("Error fetching data from API:", error);
+      getData();
+      navigate("/Home"); //통신 성공하면 Home으로 이동
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -153,14 +147,15 @@ const ModalContent = ({ openModal, closeModal }) => {
               <div className={styles.Onboarding_line}>
                 <span className={styles.bold}>지역</span>
                 <Dropdown
-                  options={residenceOptions}
+                  options={regionOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="지역을 선택해주세요"
+                  initialSelected={selectedRegion}
                   onSelect={(option) => {
-                    setSelectedResidence(option);
+                    setSelectedRegion(option);
                     setUserData((prevUserData) => ({
                       ...prevUserData,
-                      residence: option,
+                      region: option,
                     }));
                   }} // 옵션 선택 시 선택한 옵션을 상태로 업데이트
                 />
@@ -171,6 +166,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={educationOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="학력을 선택해주세요"
+                  initialSelected={selectedEducation}
                   onSelect={(option) => {
                     setSelectedEducation(option);
                     setUserData((prevUserData) => ({
@@ -186,6 +182,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={jobStatusOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="구직 상태를 선택해주세요"
+                  initialSelected={selectedJobStatus}
                   onSelect={(option) => {
                     setSelectedJobStatus(option);
                     setUserData((prevUserData) => ({
@@ -225,8 +222,8 @@ const ModalContent = ({ openModal, closeModal }) => {
               disabled={!age}
               onClick={() => {
                 setModalIsOpen(false);
-                // "선택 완료" 버튼 클릭 시 필터링 정보를 사용하여 API 요청
-                handleFilterSubmit();
+                closeModal();
+                goToHome();
               }}
             >
               선택 완료

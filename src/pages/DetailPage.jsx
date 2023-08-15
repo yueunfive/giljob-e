@@ -13,7 +13,7 @@ const DetailPage = () => {
   const [detailInfo, setDetailInfo] = useState(null);
 
   useEffect(() => {
-    const apiUrl = `http://52.79.114.100/api/policies/${bizId}`;
+    const apiUrl = `http://54.180.36.240/api/policies/${bizId}`;
 
     axios
       .get(apiUrl)

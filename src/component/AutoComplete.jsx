@@ -37,6 +37,7 @@ const AutoComplete = ({ options }) => {
   const goToSearchResults = () => {
     if (inputValue.length > 0) {
       navigate("/SearchResults");
+      window.location.href = "/SearchResults"; // SearchResults 페이지로 이동할 때 새로고침(이렇게 해야 Home에서 SearchResult로 갈 때 바로 결과값 뜸)
     }
   };
 
