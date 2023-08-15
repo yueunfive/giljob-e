@@ -22,8 +22,10 @@ function SearchResults() {
     navigate("/Home");
   };
 
-  const goToDetailPage = () => {
-    navigate("/DetailPage");
+  // 정책 상세 페이지로 이동
+  const goToDetailPage = (bizId) => {
+    // 해당 정책의 bizid를 사용하여 DetailPage로 이동
+    navigate(`/DetailPage/${bizId}`);
   };
 
   const [policyData, setPolicyData] = useState({ content: [] }); //  API 응답 데이터를 관리하는 상태 추가
@@ -35,7 +37,7 @@ function SearchResults() {
 
   // 검색 결과를 위한 API 요청 URL 생성
   const constructApiUrl = () => {
-    return `http://52.79.114.100/api/policies?keyword=${searchText}&pageNumber=${
+    return `http://54.180.36.240/api/policies?keyword=${searchText}&pageNumber=${
       activePage - 1
     }&pageSize=${itemsPerPage}`;
   };
@@ -82,7 +84,11 @@ function SearchResults() {
         </div>
         <div className={styles.card_box}>
           {policyData.content.map((policy, index) => (
-            <div key={index} className={styles.card} onClick={goToDetailPage}>
+            <div
+              key={index}
+              className={styles.card}
+              onClick={() => goToDetailPage(policy.bizId)}
+            >
               <div className={styles.card_text}>{cutText(policy.name, 24)}</div>
             </div>
           ))}

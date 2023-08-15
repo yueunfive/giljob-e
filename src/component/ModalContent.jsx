@@ -6,7 +6,7 @@ import cancel from "../img/cancel.png";
 import styles from "./ModalContent.module.css";
 import { useNavigate } from "react-router-dom";
 
-const ModalContent = ({ openModal, closeModal }) => {
+const ModalContent = ({ openModal, closeModal, getData }) => {
   let navigate = useNavigate();
 
   // input을 감싸는 div를 클릭했을 때 input으로 포커스 이동하게 하는 기능
@@ -90,7 +90,7 @@ const ModalContent = ({ openModal, closeModal }) => {
   });
 
   // 버튼 클릭 : localStorage에 사용자 정보 저장 후 '홈' 페이지로 이동
-  const goToHome = () => {
+  const goToHome = async () => {
     // age 값을 userData에 저장
     const updatedUserData = {
       ...userData,
@@ -100,8 +100,12 @@ const ModalContent = ({ openModal, closeModal }) => {
     // userData를 업데이트한 후 localStorage에 저장
     localStorage.setItem("userInfo", JSON.stringify(updatedUserData));
 
-    // navigate 이동
-    navigate("/Home");
+    try {
+      getData();
+      navigate("/Home"); //통신 성공하면 Home으로 이동
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -146,7 +150,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={regionOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="지역을 선택해주세요"
-                  initialSelected={selectedRegion} // 초기 선택 값 전달
+                  initialSelected={selectedRegion}
                   onSelect={(option) => {
                     setSelectedRegion(option);
                     setUserData((prevUserData) => ({
@@ -162,7 +166,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={educationOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="학력을 선택해주세요"
-                  initialSelected={selectedEducation} // 초기 선택 값 전달
+                  initialSelected={selectedEducation}
                   onSelect={(option) => {
                     setSelectedEducation(option);
                     setUserData((prevUserData) => ({
@@ -178,7 +182,7 @@ const ModalContent = ({ openModal, closeModal }) => {
                   options={jobStatusOptions}
                   className={styles.Onboarding_dropdown}
                   defaultOption="구직 상태를 선택해주세요"
-                  initialSelected={selectedJobStatus} // 초기 선택 값 전달
+                  initialSelected={selectedJobStatus}
                   onSelect={(option) => {
                     setSelectedJobStatus(option);
                     setUserData((prevUserData) => ({
@@ -192,10 +196,9 @@ const ModalContent = ({ openModal, closeModal }) => {
                 className={`${styles.Onboarding_line} ${styles.age_container}`}
               >
                 <span className={styles.bold}>연령</span>
-                <div className={styles.age_text} onClick={handleDivClick}>
+                <div className={styles.age_text}>
                   <span>만</span>
                   <input
-                    ref={inputRef}
                     value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                     onChange={(e) => {
                       const value = e.target.value; // 입력 값

@@ -38,7 +38,7 @@ ul {
   position: relative;
   width: 1080px;
   height: 70px;
-  z-index: 2;
+  z-index: 999;
 }
 
 .recommend {
@@ -84,10 +84,8 @@ ul {
 .card_text {
   width: 200px;
   height: 42px;
-
   position: absolute;
-  left: 20px;
-  top: 20px;
+  padding: 20px;
   font-size: 18px;
 }
 
@@ -136,13 +134,20 @@ ul {
   font-weight: 600;
 }
 
-.ranklist ul li button {
+.jobtitle {
   display: flex;
   align-items: center;
   font-size: 18px;
   font-weight: 400;
   background-color: #f9fafb;
   border: none;
+  cursor: pointer;
+}
+
+.ranklist ul li:hover,
+.ranklist ul li:hover .jobtitle {
+  background-color: #f0f6ff;
+  cursor: pointer;
 }
 
 .Modal {

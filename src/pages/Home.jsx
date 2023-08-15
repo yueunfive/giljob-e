@@ -1,24 +1,44 @@
 import logo from "../img/logo.png";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "./Home.module.css";
 import ModalContent from "../component/ModalContent";
 import AutoComplete from "../component/AutoComplete";
 import Footer from "../component/Footer";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Modal from "react-modal";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const [rankData, setRankData] = useState([]);
+  const [policyData, setPolicyData] = useState({ content: [] }); //  API 응답 데이터를 관리하는 상태 추가
 
   useEffect(() => {
     // 컴포넌트가 마운트되었을 때 주요 콘텐츠 엘리먼트를 정의
     Modal.setAppElement("#root");
   }, []);
 
+  const navigate = useNavigate();
+
   const [searchZIndex, setSearchZIndex] = useState(1); // 모달창을 열고 닫을때 검색창의 z-index를 조절(안하면 모달창 열어도 검색창 뜸)
-  // 응답 데이터를 변수에 담아 쓰려면 fetchPolicies 함수 밖으로 꺼내야 된다
-  const [policyData, setPolicyData] = useState({ content: [] }); //  API 응답 데이터를 관리하는 상태 추가
+
+  useEffect(() => {
+    // API 요청
+    const apiUrl = "http://54.180.36.240/api/policies/rank?pageSize=5";
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        // API에서 받아온 데이터 중에서 이름(name) 정보와 bizid를 추출하여 rankData에 설정
+        const newRankData = response.data.map((item) => ({
+          name: item.name,
+          bizId: item.bizId,
+        }));
+        setRankData(newRankData);
+      })
+      .catch((error) => {
+        console.error("Error fetching rank data:", error);
+      });
+  }, []); // 빈 배열을 넣어 한 번만 호출되도록 설정
 
   // 모달 열릴 때 z-index 값을 변경
   const openModal = () => {
@@ -34,8 +54,10 @@ const Home = () => {
     navigate("/Home");
   };
 
-  const goToDetailPage = () => {
-    navigate("/DetailPage");
+  // 정책 상세 페이지로 이동
+  const goToDetailPage = (bizId) => {
+    // 해당 정책의 bizid를 사용하여 DetailPage로 이동
+    navigate(`/DetailPage/${bizId}`);
   };
 
   // 24자 초과할 경우 ..으로 표시
@@ -80,57 +102,38 @@ const Home = () => {
     "단기 근로자": "TEMPORARY_WORKER",
   };
 
-  // 로컬 스토리지에서 사용자 정보를 가져옴
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  const [translatedData, setTranslatedData] = useState({
-    region: "",
-    education: "",
-    jobStatus: "",
-    age: 0,
-  });
-
-  // 로컬 스토리지에서 가져온 값을 초기에 translatedData로 설정
-  useEffect(() => {
-    if (userInfo) {
-      const translatedRegion = translationMap[userInfo.region];
-      const translatedEducation = translationMap[userInfo.education];
-      const translatedJobStatus = translationMap[userInfo.jobStatus];
-      const userAge = parseInt(userInfo.age);
-
-      setTranslatedData({
-        region: translatedRegion,
-        education: translatedEducation,
-        jobStatus: translatedJobStatus,
-        age: userAge,
-      });
-    }
-  }, [userInfo]);
-
   // 맞춤 추천을 위한 API 요청 URL 생성
-  const constructApiUrl = () => {
-    return `http://52.79.114.100/api/policies?age=${translatedData.age}&education=${translatedData.education}&jobStatus=${translatedData.jobStatus}&pageNumber=0&pageSize=4&residence=${translatedData.region}`;
+  const constructApiUrl = (tmpData) => {
+    return `http://54.180.36.240/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의
-  const fetchPolicies = async () => {
-    try {
-      const response = await axios.get(constructApiUrl()); // API 요청
+  const fetchPolicies = (tmpData) => {
+    axios
+      .get(constructApiUrl(tmpData))
+      .then((res) => {
+        console.log(res);
+        setPolicyData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
-      setPolicyData(response.data); // policyData 업데이트
-    } catch (error) {
-      console.error("Error fetching policies:", error);
-      console.log("Translated Data:", translatedData); // 콘솔창에 띄어 보니까 데이터는 잘 들어갔고 요청 URL도 맞는데 왜ㅜ
-      console.log(constructApiUrl());
+  // 로컬 스토리지에서 사용자 정보를 가져옴
+  const getData = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")); //이건 어차피 알아서 받아와지는거 굳이 상태처리할필요없음
+
+    if (userInfo) {
+      const tmpData = {
+        region: translationMap[userInfo.region],
+        education: translationMap[userInfo.education],
+        jobStatus: translationMap[userInfo.jobStatus],
+        age: parseInt(userInfo.age),
+      };
+      fetchPolicies(tmpData); //비동기 await~~해서 위에 로컬스토리지에서 받아온 객체 넣어줌
     }
   };
 
-  // translatedData가 변경될 때에만 API를 호출
-  useEffect(() => {
-    if (userInfo) {
-      fetchPolicies(); // API 호출
-    }
-  }, [translatedData]);
+  useEffect(getData, []);
 
   return (
     <div className={styles.Home}>
@@ -138,17 +141,25 @@ const Home = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className={styles.search} style={{ zIndex: searchZIndex }}>
-        <AutoComplete />
+        <AutoComplete></AutoComplete>
       </div>
       <div className={styles.recommend}>
         <div className={styles.recotitle}>
           <span>맞춤 일자리 정책 추천</span>
-          <ModalContent openModal={openModal} closeModal={closeModal} />
+          <ModalContent
+            openModal={openModal}
+            closeModal={closeModal}
+            getData={getData}
+          />
         </div>
         {/* 배열 매핑으로 맞춤 추천 최종 구현!*/}
         <div className={styles.card_box}>
           {policyData.content.map((policy, index) => (
-            <div className={styles.card} onClick={goToDetailPage} key={index}>
+            <div
+              className={styles.card}
+              onClick={() => goToDetailPage(policy.bizId)}
+              key={index}
+            >
               <div className={styles.card_text}>{cutText(policy.name, 24)}</div>
             </div>
           ))}
@@ -160,26 +171,19 @@ const Home = () => {
         </div>
         <div className={styles.ranklist}>
           <ul>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>1</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>2</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>3</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>4</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
-            <li onClick={goToDetailPage}>
-              <span className={styles.ranknum}>5</span>
-              <button className={styles.jobtitle}>정책 이름</button>
-            </li>
+            {/* rankData를 이용하여 정책 순위 리스트 생성 */}
+            {rankData.map((policy, index) => (
+              <li key={index}>
+                <span className={styles.ranknum}>{index + 1}</span>
+                {/* 정책 이름 버튼을 클릭할 때 해당 정책의 bizid를 전달 */}
+                <button
+                  className={styles.jobtitle}
+                  onClick={() => goToDetailPage(policy.bizId)}
+                >
+                  {policy.name}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
