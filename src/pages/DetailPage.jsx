@@ -13,7 +13,7 @@ const DetailPage = () => {
   const [detailInfo, setDetailInfo] = useState(null);
 
   useEffect(() => {
-    const apiUrl = `http://54.180.36.240/api/policies/${bizId}`;
+    const apiUrl = `https://www.giljob-e.shop/api/policies/${bizId}`;
 
     axios
       .get(apiUrl)
@@ -39,6 +39,18 @@ const DetailPage = () => {
     const applyUrl = `https://www.youthcenter.go.kr/youngPlcyUnif/youngPlcyUnifDtl.do?bizId=${bizId}`;
     window.location.href = applyUrl;
   };
+
+  const ageInfoMinText =
+    detailInfo.ageInfoMin === -2147483648
+      ? detailInfo.ageInfoMax === 2147483647
+        ? "제한 없음"
+        : `만 ${detailInfo.ageInfoMax}세 이하`
+      : `만 ${detailInfo.ageInfoMin}세`;
+
+  const ageInfoMaxText =
+    detailInfo.ageInfoMax === 2147483647
+      ? "제한 없음"
+      : `만 ${detailInfo.ageInfoMax}세`;
 
   return (
     <div>
@@ -80,8 +92,11 @@ const DetailPage = () => {
               <ul className={styles.detailcontent}>
                 <li>
                   <span>
-                    연령 : 만 {detailInfo.ageInfoMin}세 ~{" "}
-                    {detailInfo.ageInfoMax}세
+                    연령 : {ageInfoMinText}
+                    {detailInfo.ageInfoMin !== -2147483648 &&
+                    detailInfo.ageInfoMax !== 2147483647
+                      ? ` ~ ${ageInfoMaxText}`
+                      : ""}
                   </span>
                 </li>
                 <li>

@@ -17,7 +17,7 @@ function Onboarding() {
 
   // 로고에 적용할 클릭 이벤트 함수
   const goToWelcome = () => {
-    navigate("/");
+    navigate("/giljob-e");
   };
 
   const regionOptions = [
@@ -130,7 +130,7 @@ function Onboarding() {
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = (tmpData) => {
-    return `http://54.180.36.240/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
+    return `https://www.giljob-e.shop/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의
@@ -218,9 +218,10 @@ function Onboarding() {
               className={`${styles.Onboarding_line} ${styles.age_container}`}
             >
               <span className={styles.bold}>연령</span>
-              <div className={styles.age_text}>
+              <div className={styles.age_text} onClick={handleDivClick}>
                 <span>만</span>
                 <input
+                  ref={inputRef}
                   value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                   onChange={(e) => {
                     const value = e.target.value; // 입력 값

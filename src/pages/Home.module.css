@@ -134,20 +134,18 @@ ul {
   font-weight: 600;
 }
 
-.ranklist ul li button {
+.jobtitle {
   display: flex;
   align-items: center;
   font-size: 18px;
   font-weight: 400;
   background-color: #f9fafb;
   border: none;
-}
-
-.jobtitle {
   cursor: pointer;
 }
 
-.jobtitle:hover {
+.ranklist ul li:hover,
+.ranklist ul li:hover .jobtitle {
   background-color: #f0f6ff;
   cursor: pointer;
 }

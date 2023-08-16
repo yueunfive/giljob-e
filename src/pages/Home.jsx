@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
 const Home = () => {
-  const [options, setOptions] = useState([]);
   const [rankData, setRankData] = useState([]);
   const [policyData, setPolicyData] = useState({ content: [] }); //  API 응답 데이터를 관리하는 상태 추가
 
@@ -24,7 +23,7 @@ const Home = () => {
 
   useEffect(() => {
     // API 요청
-    const apiUrl = "http://54.180.36.240/api/policies/rank?pageSize=5";
+    const apiUrl = "https://www.giljob-e.shop/api/policies/rank?pageSize=5";
 
     axios
       .get(apiUrl)
@@ -40,29 +39,6 @@ const Home = () => {
         console.error("Error fetching rank data:", error);
       });
   }, []); // 빈 배열을 넣어 한 번만 호출되도록 설정
-
-  useEffect(() => {
-    const apiUrl = "http://54.180.36.240/api/policies?pageSize=10";
-    const params = {
-      age: null,
-      education: null,
-      jobStatus: null,
-      keyword: null,
-      pageNumber: null,
-      pageSize: null,
-      residence: null,
-    };
-
-    axios
-      .get(apiUrl, { params })
-      .then((response) => {
-        const newOptions = response.data.content.map((item) => item.name);
-        setOptions(newOptions);
-      })
-      .catch((error) => {
-        console.error("Error fetching data from API:", error);
-      });
-  }, []);
 
   // 모달 열릴 때 z-index 값을 변경
   const openModal = () => {
@@ -128,7 +104,7 @@ const Home = () => {
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = (tmpData) => {
-    return `http://54.180.36.240/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
+    return `https://www.giljob-e.shop/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의
@@ -165,7 +141,7 @@ const Home = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className={styles.search} style={{ zIndex: searchZIndex }}>
-        <AutoComplete options={options}></AutoComplete>
+        <AutoComplete></AutoComplete>
       </div>
       <div className={styles.recommend}>
         <div className={styles.recotitle}>

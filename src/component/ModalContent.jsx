@@ -196,9 +196,10 @@ const ModalContent = ({ openModal, closeModal, getData }) => {
                 className={`${styles.Onboarding_line} ${styles.age_container}`}
               >
                 <span className={styles.bold}>연령</span>
-                <div className={styles.age_text}>
+                <div className={styles.age_text} onClick={handleDivClick}>
                   <span>만</span>
                   <input
+                    ref={inputRef}
                     value={age === null ? "" : age} // null일 경우 빈 문자열로 표시
                     onChange={(e) => {
                       const value = e.target.value; // 입력 값

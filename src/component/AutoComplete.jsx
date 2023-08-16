@@ -1,14 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import search from "../img/search.png";
 import styles from "./AutoComplete.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const AutoComplete = ({ options }) => {
+const AutoComplete = () => {
   let navigate = useNavigate();
   const inputRef = useRef(null);
 
   const [inputValue, setInputValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
+  const [options, setOptions] = useState([]);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -25,7 +27,19 @@ const AutoComplete = ({ options }) => {
   const handleSelectOption = (option) => {
     setInputValue(option);
     setFilteredOptions([]);
-    inputRef.current.focus();
+
+    const selectedPolicy = options.find((policy) => policy === option);
+    if (selectedPolicy) {
+      axios
+        .get(`https://www.giljob-e.shop/api/policies?name=${selectedPolicy}`)
+        .then((response) => {
+          const bizId = response.data.content[0].bizId; // 가정한 예시
+          navigate(`/DetailPage/${bizId}`);
+        })
+        .catch((error) => {
+          console.error("Error fetching policy details:", error);
+        });
+    }
   };
 
   const handleBlur = () => {
@@ -73,6 +87,40 @@ const AutoComplete = ({ options }) => {
       </>
     );
   };
+
+  useEffect(() => {
+    const defaultURL = "https://www.giljob-e.shop/api/policies";
+    const params = {
+      age: null,
+      education: null,
+      jobStatus: null,
+      keyword: null,
+      pageNumber: null,
+      pageSize: null,
+      residence: null,
+    };
+    axios
+      .get(defaultURL)
+      .then((response) => {
+        const totalElements = response.data.totalElements;
+        const apiUrl = `https://www.giljob-e.shop/api/policies?pageSize=${totalElements}`;
+        console.log(apiUrl);
+        axios
+          .get(apiUrl, { params })
+          .then((secondResponse) => {
+            const newOptions = secondResponse.data.content.map(
+              (item) => item.name
+            );
+            setOptions(newOptions);
+          })
+          .catch((error) => {
+            console.error("Error fetching data from API:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching data from API:", error);
+      });
+  }, []);
 
   return (
     <div className={styles.dropdown}>
