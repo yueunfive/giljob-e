@@ -40,6 +40,18 @@ const DetailPage = () => {
     window.location.href = applyUrl;
   };
 
+  const ageInfoMinText =
+    detailInfo.ageInfoMin === -2147483648
+      ? detailInfo.ageInfoMax === 2147483647
+        ? "제한없음"
+        : `만 ${detailInfo.ageInfoMax}세 이하`
+      : `만 ${detailInfo.ageInfoMin}세`;
+
+  const ageInfoMaxText =
+    detailInfo.ageInfoMax === 2147483647
+      ? "제한없음"
+      : `만 ${detailInfo.ageInfoMax}세`;
+
   return (
     <div>
       <div className={styles.logo} onClick={goToHome}>
@@ -80,8 +92,11 @@ const DetailPage = () => {
               <ul className={styles.detailcontent}>
                 <li>
                   <span>
-                    연령 : 만 {detailInfo.ageInfoMin}세 ~{" "}
-                    {detailInfo.ageInfoMax}세
+                    연령 : {ageInfoMinText}
+                    {detailInfo.ageInfoMin !== -2147483648 &&
+                    detailInfo.ageInfoMax !== 2147483647
+                      ? ` ~ ${ageInfoMaxText}`
+                      : ""}
                   </span>
                 </li>
                 <li>

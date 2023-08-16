@@ -27,7 +27,19 @@ const AutoComplete = () => {
   const handleSelectOption = (option) => {
     setInputValue(option);
     setFilteredOptions([]);
-    inputRef.current.focus();
+
+    const selectedPolicy = options.find((policy) => policy === option);
+    if (selectedPolicy) {
+      axios
+        .get(`https://www.giljob-e.shop/api/policies?name=${selectedPolicy}`)
+        .then((response) => {
+          const bizId = response.data.content[0].bizId; // 가정한 예시
+          navigate(`/DetailPage/${bizId}`);
+        })
+        .catch((error) => {
+          console.error("Error fetching policy details:", error);
+        });
+    }
   };
 
   const handleBlur = () => {

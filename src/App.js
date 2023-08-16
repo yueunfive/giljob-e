@@ -13,7 +13,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Welcome />} />
+          <Route path="/giljob-e" element={<Welcome />} />
           <Route path="/Onboarding" element={<Onboarding />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/DetailPage/:bizId" element={<DetailPage />} />

@@ -18,12 +18,18 @@ function cutText(text, maxLength) {
 function SearchResults() {
   const navigate = useNavigate();
 
+  // 이전에 보던 페이지 번호를 저장할 상태
+  const [lastPageVisited, setLastPageVisited] = useState(1);
+  const [visitedPages, setVisitedPages] = useState([1]); // 이전에 방문한 페이지 번호를 저장하는 상태
+
   const goToHome = () => {
     navigate("/Home");
   };
 
   // 정책 상세 페이지로 이동
   const goToDetailPage = (bizId) => {
+    // 현재 페이지 번호 저장
+    setLastPageVisited(activePage);
     // 해당 정책의 bizid를 사용하여 DetailPage로 이동
     navigate(`/DetailPage/${bizId}`);
   };
@@ -59,13 +65,34 @@ function SearchResults() {
   // searchText가 변경될 때에만 API를 호출
   useEffect(() => {
     if (searchText) {
+      if (activePage === 1) {
+        setActivePage(lastPageVisited);
+      }
       fetchPolicies(); // API 호출
     }
-  }, [searchText, activePage]);
+  }, [searchText, lastPageVisited, activePage]);
 
-  // 페이지 번호 변경 핸들러
+  // 뒤로 가기를 눌렀을 때 이전 페이지 번호를 확인하고 설정
+  useEffect(() => {
+    window.onpopstate = (event) => {
+      if (event.state) {
+        setActivePage(event.state.page);
+        setLastPageVisited(event.state.page);
+      }
+    };
+  }, []);
+
+  // 페이지 번호 변경 시 호출되는 함수
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
+
+    if (!visitedPages.includes(pageNumber)) {
+      setVisitedPages([...visitedPages, pageNumber]);
+    }
+
+    // 브라우저 히스토리에 현재 페이지 정보를 저장
+    window.history.pushState({ page: pageNumber }, "", "");
+    setLastPageVisited(pageNumber);
   };
 
   return (
@@ -99,7 +126,15 @@ function SearchResults() {
         itemsCountPerPage={itemsPerPage} // 페이지당 보여줄 아이템 개수
         totalItemsCount={policyData.totalElements} // 전체 아이템 개수로 변경
         pageRangeDisplayed={5} // 페이지 번호 버튼의 범위 (양 옆으로 몇 개의 페이지 번호를 보여줄지)
-        onChange={handlePageChange} // 페이지 번호 변경 시 호출되는 함수
+        onChange={(pageNumber) => {
+          if (pageNumber !== lastPageVisited) {
+            // 현재 페이지 번호와 이전에 보던 페이지 번호가 다른 경우
+            // 브라우저 히스토리에 페이지 정보를 저장
+            window.history.pushState({ page: pageNumber }, "", "");
+            setLastPageVisited(pageNumber);
+          }
+          setActivePage(pageNumber);
+        }} // 페이지 번호 변경 시 호출되는 함수
         activeClass={styles.custom_active} // 활성화된 페이지 스타일
         itemClass={styles.custom_page_item} // 페이지 아이템 스타일
         linkClass={styles.custom_page_link} // 페이지 링크 스타일

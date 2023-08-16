@@ -17,7 +17,7 @@ function Onboarding() {
 
   // 로고에 적용할 클릭 이벤트 함수
   const goToWelcome = () => {
-    navigate("/");
+    navigate("/giljob-e");
   };
 
   const regionOptions = [
