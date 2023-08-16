@@ -43,13 +43,13 @@ const DetailPage = () => {
   const ageInfoMinText =
     detailInfo.ageInfoMin === -2147483648
       ? detailInfo.ageInfoMax === 2147483647
-        ? "제한 없음"
+        ? "제한없음"
         : `만 ${detailInfo.ageInfoMax}세 이하`
       : `만 ${detailInfo.ageInfoMin}세`;
 
   const ageInfoMaxText =
     detailInfo.ageInfoMax === 2147483647
-      ? "제한 없음"
+      ? "제한없음"
       : `만 ${detailInfo.ageInfoMax}세`;
 
   return (
