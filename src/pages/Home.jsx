@@ -173,15 +173,10 @@ const Home = () => {
           <ul>
             {/* rankData를 이용하여 정책 순위 리스트 생성 */}
             {rankData.map((policy, index) => (
-              <li key={index}>
+              <li key={index} onClick={() => goToDetailPage(policy.bizId)}>
                 <span className={styles.ranknum}>{index + 1}</span>
                 {/* 정책 이름 버튼을 클릭할 때 해당 정책의 bizid를 전달 */}
-                <button
-                  className={styles.jobtitle}
-                  onClick={() => goToDetailPage(policy.bizId)}
-                >
-                  {policy.name}
-                </button>
+                <button className={styles.jobtitle}>{policy.name}</button>
               </li>
             ))}
           </ul>

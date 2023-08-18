@@ -197,7 +197,6 @@ const DetailPage = () => {
                   </span>
                 </li>
                 <li>
-                  <span>추가 단서 사항 : {detailInfo.additionalCondition}</span>
                   <span className={styles.detailsmalltitle}>
                     추가 단서 사항 <br />
                   </span>
