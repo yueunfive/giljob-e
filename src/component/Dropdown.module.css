@@ -19,11 +19,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 /* 옵션이 선택되었을 때 드롭다운 버튼의 스타일 */
 .dropdown_container .drop_btn.selected {
   color: black;
+}
+
+.drop_btn img {
+  position: absolute;
+  right: 30px;
 }
 
 /* 드롭다운이 열렸을 때 버튼 스타일 */

@@ -82,18 +82,28 @@ function SearchResults() {
     };
   }, []);
 
-  // 페이지 번호 변경 시 호출되는 함수
-  const handlePageChange = (pageNumber) => {
-    setActivePage(pageNumber);
+  // // 페이지 번호 변경 시 호출되는 함수(안 쓰길래 일단 주석처리)
+  // const handlePageChange = (pageNumber) => {
+  //   setActivePage(pageNumber);
 
-    if (!visitedPages.includes(pageNumber)) {
-      setVisitedPages([...visitedPages, pageNumber]);
-    }
+  //   if (!visitedPages.includes(pageNumber)) {
+  //     setVisitedPages([...visitedPages, pageNumber]);
+  //   }
 
-    // 브라우저 히스토리에 현재 페이지 정보를 저장
-    window.history.pushState({ page: pageNumber }, "", "");
-    setLastPageVisited(pageNumber);
-  };
+  //   // 브라우저 히스토리에 현재 페이지 정보를 저장
+  //   window.history.pushState({ page: pageNumber }, "", "");
+  //   setLastPageVisited(pageNumber);
+  // };
+
+  // 새로고침했을 때 현재 페이지 정보 유지
+  // 페이지 로드 시 URL의 쿼리 매개변수에서 페이지 번호 읽어와 활성 페이지 설정
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const pageParam = queryParams.get("page");
+    const initialPage = pageParam ? parseInt(pageParam) : lastPageVisited; // 변경된 부분
+    setActivePage(initialPage);
+    setLastPageVisited(initialPage);
+  }, []);
 
   return (
     <div className={styles.Home}>
@@ -106,7 +116,7 @@ function SearchResults() {
       <div className={styles.SearchResults}>
         <div className={styles.search_text}>
           <h1>
-            <span>'{searchText}'</span> 검색 결과
+            <span>'{cutText(searchText, 27)}'</span> 검색 결과
           </h1>
         </div>
         <div className={styles.card_box}>
@@ -126,11 +136,12 @@ function SearchResults() {
         itemsCountPerPage={itemsPerPage} // 페이지당 보여줄 아이템 개수
         totalItemsCount={policyData.totalElements} // 전체 아이템 개수로 변경
         pageRangeDisplayed={5} // 페이지 번호 버튼의 범위 (양 옆으로 몇 개의 페이지 번호를 보여줄지)
+        prevPageText="<"
+        nextPageText=">"
+        hideFirstLastPages={true} /* 맨 앞과 끝 페이지 버튼이 숨겨짐 */
         onChange={(pageNumber) => {
           if (pageNumber !== lastPageVisited) {
-            // 현재 페이지 번호와 이전에 보던 페이지 번호가 다른 경우
-            // 브라우저 히스토리에 페이지 정보를 저장
-            window.history.pushState({ page: pageNumber }, "", "");
+            window.history.pushState({ page: pageNumber }, "", ""); // 현재 페이지 번호와 이전에 보던 페이지 번호가 다른 경우 브라우저 히스토리에 페이지 정보를 저장
             setLastPageVisited(pageNumber);
           }
           setActivePage(pageNumber);

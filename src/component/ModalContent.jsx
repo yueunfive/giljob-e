@@ -83,9 +83,9 @@ const ModalContent = ({ openModal, closeModal, getData }) => {
 
   //  Onboarding 컴포넌트에서 선택한 정보를 userData 상태로 저장(userData의 초기 값을 localStorage 정보로 교체!)
   const [userData, setUserData] = useState({
-    region: selectedRegion,
-    education: selectedEducation,
-    jobStatus: selectedJobStatus,
+    region: userInfo.region,
+    education: userInfo.education,
+    jobStatus: userInfo.jobStatus,
     age: age,
   });
 

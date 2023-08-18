@@ -48,8 +48,8 @@
   width: 1032px;
   height: 588px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 24px;
   align-content: space-between;
 }
 
@@ -78,6 +78,7 @@
 }
 
 /* 커스텀 페이지네이션 스타일 */
+
 .custom_active a {
   color: #5b74e6;
 }

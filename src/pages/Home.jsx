@@ -104,7 +104,7 @@ const Home = () => {
 
   // 맞춤 추천을 위한 API 요청 URL 생성
   const constructApiUrl = (tmpData) => {
-    return `https://www.giljob-e.shop/api/policies?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
+    return `https://www.giljob-e.shop/api/policies/recommendation?age=${tmpData.age}&education=${tmpData.education}&jobStatus=${tmpData.jobStatus}&pageNumber=0&pageSize=4&residence=${tmpData.region}`;
   };
 
   // API 호출 함수 정의

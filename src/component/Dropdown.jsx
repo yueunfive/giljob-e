@@ -26,9 +26,14 @@ function Dropdown({ options, defaultOption, onSelect, initialSelected }) {
   }, []);
 
   // 드롭다운 버튼을 클릭했을 때 isOpen 상태를 토글하여 드롭다운 내용을 보이거나 숨김(+이미지 토글)
+  // 드롭다운 내용이 보이는 상태에서 버튼 재클릭시 setIsOriginal(true)로 아이콘 변경
   const handleDropdownClick = () => {
     setIsOpen(!isOpen);
-    setIsOriginal(false);
+    if (isOriginal) {
+      setIsOriginal(false);
+    } else {
+      setIsOriginal(true);
+    }
   };
 
   // 드롭다운 내용에서 옵션을 클릭했을 때 호출되는 함수
