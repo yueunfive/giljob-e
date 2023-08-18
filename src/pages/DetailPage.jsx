@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import logo from "../img/logo.png";
 import styles from "./DetailPage.module.css";
 import Footer from "../component/Footer";
@@ -11,6 +11,7 @@ const DetailPage = () => {
 
   const { bizId } = useParams();
   const [detailInfo, setDetailInfo] = useState(null);
+  const contentBoxRef = useRef(null);
 
   useEffect(() => {
     const apiUrl = `https://www.giljob-e.shop/api/policies/${bizId}`;
@@ -26,8 +27,16 @@ const DetailPage = () => {
       });
   }, [bizId]);
 
+  useEffect(() => {
+    if (detailInfo) {
+      if (contentBoxRef.current) {
+        contentBoxRef.current.style.height = `${contentBoxRef.current.scrollHeight}px`;
+      }
+    }
+  }, [detailInfo]);
+
   if (!detailInfo) {
-    return <div>Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   const goToHome = () => {
@@ -64,7 +73,7 @@ const DetailPage = () => {
       <div className={styles.content}>
         {detailInfo ? (
           <>
-            <div className={styles.detail}>
+            <div className={styles.detail} ref={contentBoxRef}>
               <span className={styles.detailtitle}>정책 상세 설명</span>
               <ul className={styles.detailcontent}>
                 <li>
@@ -127,7 +136,7 @@ const DetailPage = () => {
                 </li>
               </ul>
             </div>
-            <div className={styles.qualify}>
+            <div className={styles.qualify} ref={contentBoxRef}>
               <span className={styles.detailtitle}>신청 자격</span>
               <ul className={styles.detailcontent}>
                 <li>
@@ -212,10 +221,10 @@ const DetailPage = () => {
                     참여 제한 대상 <br />
                   </span>
                   <span>
-                    {detailInfo.restrictedPaticipant === "null" ||
-                    detailInfo.restrictedPaticipant === " "
+                    {detailInfo.restrictedParticipant === "null" ||
+                    detailInfo.restrictedParticipant === " "
                       ? "-"
-                      : detailInfo.restrictedPaticipant}
+                      : detailInfo.restrictedParticipant}
                   </span>
                 </li>
               </ul>

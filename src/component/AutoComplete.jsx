@@ -27,17 +27,24 @@ const AutoComplete = () => {
   const handleSelectOption = (option) => {
     setInputValue(option);
     setFilteredOptions([]);
+    inputRef.current.focus();
 
     const selectedPolicy = options.find((policy) => policy === option);
     if (selectedPolicy) {
+      const apiUrl = `https://www.giljob-e.shop/api/policies`;
       axios
-        .get(`https://www.giljob-e.shop/api/policies?name=${selectedPolicy}`)
+        .get(apiUrl)
         .then((response) => {
-          const bizId = response.data.content[0].bizId; // 가정한 예시
-          navigate(`/DetailPage/${bizId}`);
+          const selectedPolicyInfo = response.data.content.find(
+            (item) => item.name === selectedPolicy
+          );
+          if (selectedPolicyInfo) {
+            const bizId = selectedPolicyInfo.bizId;
+            navigate(`/DetailPage/${bizId}`);
+          }
         })
         .catch((error) => {
-          console.error("Error fetching policy details:", error);
+          console.error("Error fetching policy data from API:", error);
         });
     }
   };
