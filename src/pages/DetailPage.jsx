@@ -68,22 +68,62 @@ const DetailPage = () => {
               <span className={styles.detailtitle}>정책 상세 설명</span>
               <ul className={styles.detailcontent}>
                 <li>
-                  <span>정책 번호 : {detailInfo.bizId}</span>
+                  <span className={styles.detailsmalltitle}>
+                    정책 번호 <br />
+                  </span>
+                  <span>
+                    {detailInfo.bizId === "null" || detailInfo.bizId === " "
+                      ? "-"
+                      : detailInfo.bizId}
+                  </span>
                 </li>
                 <li>
-                  <span>정책 분야 : 일자리 분야</span>
+                  <span className={styles.detailsmalltitle}>
+                    정책 분야 <br />
+                  </span>
+                  <span>일자리 분야</span>
                 </li>
                 <li>
-                  <span>지원 내용 : {detailInfo.content}</span>
+                  <span className={styles.detailsmalltitle}>
+                    지원 내용 <br />
+                  </span>
+                  <span>
+                    {detailInfo.content === "null" || detailInfo.content === " "
+                      ? "-"
+                      : detailInfo.content}
+                  </span>
                 </li>
                 <li>
-                  <span>사업 운영 기간 : {detailInfo.managePeriod}</span>
+                  <span className={styles.detailsmalltitle}>
+                    사업 운영 기간 <br />
+                  </span>
+                  <span>
+                    {detailInfo.managePeriod === "null" ||
+                    detailInfo.managePeriod === " "
+                      ? "-"
+                      : detailInfo.managePeriod}
+                  </span>
                 </li>
                 <li>
-                  <span>사업 신청 기간 : {detailInfo.applicationPeriod}</span>
+                  <span className={styles.detailsmalltitle}>
+                    사업 신청 기간 <br />
+                  </span>
+                  <span>
+                    {detailInfo.applicationPeriod === "null" ||
+                    detailInfo.applicationPeriod === " "
+                      ? "-"
+                      : detailInfo.applicationPeriod}
+                  </span>
                 </li>
                 <li>
-                  <span>지원 규모(명) : {detailInfo.scale}</span>
+                  <span className={styles.detailsmalltitle}>
+                    지원 규모(명) <br />
+                  </span>
+                  <span>
+                    {detailInfo.scale === "null" || detailInfo.scale === " "
+                      ? "-"
+                      : detailInfo.scale}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -91,8 +131,11 @@ const DetailPage = () => {
               <span className={styles.detailtitle}>신청 자격</span>
               <ul className={styles.detailcontent}>
                 <li>
+                  <span className={styles.detailsmalltitle}>
+                    연령 <br />
+                  </span>
                   <span>
-                    연령 : {ageInfoMinText}
+                    {ageInfoMinText}
                     {detailInfo.ageInfoMin !== -2147483648 &&
                     detailInfo.ageInfoMax !== 2147483647
                       ? ` ~ ${ageInfoMaxText}`
@@ -100,26 +143,80 @@ const DetailPage = () => {
                   </span>
                 </li>
                 <li>
-                  <span>거주지 및 소득 : {detailInfo.residence}</span>
+                  <span className={styles.detailsmalltitle}>
+                    거주지 및 소득 <br />
+                  </span>
+                  <span>
+                    {detailInfo.residence === "null" ||
+                    detailInfo.residence === " "
+                      ? "-"
+                      : detailInfo.residence}
+                  </span>
                 </li>
                 <li>
-                  <span>학력 : {detailInfo.education}</span>
+                  <span className={styles.detailsmalltitle}>
+                    학력 <br />
+                  </span>
+                  <span>
+                    {detailInfo.education === "null" ||
+                    detailInfo.education === " "
+                      ? "-"
+                      : detailInfo.education}
+                  </span>
                 </li>
                 <li>
-                  <span>전공 : {detailInfo.major}</span>
+                  <span className={styles.detailsmalltitle}>
+                    전공 <br />
+                  </span>
+                  <span>
+                    {detailInfo.major === "null" || detailInfo.major === " "
+                      ? "-"
+                      : detailInfo.major}
+                  </span>
                 </li>
                 <li>
-                  <span>취업 상태 : {detailInfo.jobStatus}</span>
+                  <span className={styles.detailsmalltitle}>
+                    취업 상태 <br />
+                  </span>
+                  <span>
+                    {detailInfo.jobStatus === "null" ||
+                    detailInfo.jobStatus === " "
+                      ? "-"
+                      : detailInfo.jobStatus}
+                  </span>
                 </li>
                 <li>
-                  <span>특화 분야 : {detailInfo.specialization}</span>
+                  <span className={styles.detailsmalltitle}>
+                    특화 분야 <br />
+                  </span>
+                  <span>
+                    {detailInfo.specialization === "null" ||
+                    detailInfo.specialization === " "
+                      ? "-"
+                      : detailInfo.specialization}
+                  </span>
                 </li>
                 <li>
                   <span>추가 단서 사항 : {detailInfo.additionalCondition}</span>
+                  <span className={styles.detailsmalltitle}>
+                    추가 단서 사항 <br />
+                  </span>
+                  <span>
+                    {detailInfo.additionalCondition === "null" ||
+                    detailInfo.additionalCondition === " "
+                      ? "-"
+                      : detailInfo.additionalCondition}
+                  </span>
                 </li>
                 <li>
+                  <span className={styles.detailsmalltitle}>
+                    참여 제한 대상 <br />
+                  </span>
                   <span>
-                    참여 제한 대상 : {detailInfo.restrictedPaticipant}
+                    {detailInfo.restrictedPaticipant === "null" ||
+                    detailInfo.restrictedPaticipant === " "
+                      ? "-"
+                      : detailInfo.restrictedPaticipant}
                   </span>
                 </li>
               </ul>
