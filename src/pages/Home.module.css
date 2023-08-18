@@ -73,7 +73,6 @@ ul {
   border-radius: 9.259px;
   border: 1px solid #f2f4f6;
   background: #f4f6ff;
-  position: relative;
   cursor: pointer;
 }
 
@@ -82,9 +81,7 @@ ul {
 }
 
 .card_text {
-  width: 200px;
-  height: 42px;
-  position: absolute;
+  width: 240px;
   padding: 20px;
   font-size: 18px;
 }
