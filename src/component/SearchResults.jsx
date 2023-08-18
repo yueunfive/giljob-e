@@ -82,28 +82,34 @@ function SearchResults() {
     };
   }, []);
 
-  // // 페이지 번호 변경 시 호출되는 함수(안 쓰길래 일단 주석처리)
-  // const handlePageChange = (pageNumber) => {
-  //   setActivePage(pageNumber);
+  // 페이지 번호 변경 시 호출되는 함수
+  const handlePageChange = (pageNumber) => {
+    // 현재 페이지 번호와 이전에 보던 페이지 번호가 다른 경우 브라우저 히스토리에 페이지 정보를 저장
+    if (pageNumber !== lastPageVisited) {
+      window.history.pushState({ page: pageNumber }, "", `?page=${pageNumber}`);
+      setLastPageVisited(pageNumber);
+    }
+    setActivePage(pageNumber);
+  };
 
-  //   if (!visitedPages.includes(pageNumber)) {
-  //     setVisitedPages([...visitedPages, pageNumber]);
-  //   }
-
-  //   // 브라우저 히스토리에 현재 페이지 정보를 저장
-  //   window.history.pushState({ page: pageNumber }, "", "");
-  //   setLastPageVisited(pageNumber);
-  // };
-
-  // 새로고침했을 때 현재 페이지 정보 유지
-  // 페이지 로드 시 URL의 쿼리 매개변수에서 페이지 번호 읽어와 활성 페이지 설정
+  // 새로고침 시 URL의 쿼리 매개변수에서 페이지 번호 읽어와 활성 페이지 설정
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const pageParam = queryParams.get("page");
-    const initialPage = pageParam ? parseInt(pageParam) : lastPageVisited; // 변경된 부분
-    setActivePage(initialPage);
-    setLastPageVisited(initialPage);
+    const initialPage = pageParam ? parseInt(pageParam) : lastPageVisited;
+
+    if (searchText) {
+      setActivePage(initialPage);
+      setLastPageVisited(initialPage);
+    }
   }, []);
+
+  // 새로운 useEffect 추가: activePage 변경 시 API 호출
+  useEffect(() => {
+    if (searchText) {
+      fetchPolicies();
+    }
+  }, [activePage]);
 
   return (
     <div className={styles.Home}>
@@ -139,13 +145,7 @@ function SearchResults() {
         prevPageText="<"
         nextPageText=">"
         hideFirstLastPages={true} /* 맨 앞과 끝 페이지 버튼이 숨겨짐 */
-        onChange={(pageNumber) => {
-          if (pageNumber !== lastPageVisited) {
-            window.history.pushState({ page: pageNumber }, "", ""); // 현재 페이지 번호와 이전에 보던 페이지 번호가 다른 경우 브라우저 히스토리에 페이지 정보를 저장
-            setLastPageVisited(pageNumber);
-          }
-          setActivePage(pageNumber);
-        }} // 페이지 번호 변경 시 호출되는 함수
+        onChange={handlePageChange}
         activeClass={styles.custom_active} // 활성화된 페이지 스타일
         itemClass={styles.custom_page_item} // 페이지 아이템 스타일
         linkClass={styles.custom_page_link} // 페이지 링크 스타일
