@@ -48,9 +48,10 @@
   width: 1032px;
   height: 588px;
   display: flex;
+
   flex-wrap: wrap;
   gap: 24px;
-  align-content: space-between;
+  align-content: start;
 }
 
 .card {
