@@ -52,6 +52,7 @@ ul {
   font-size: 48px;
   font-weight: 600;
   text-align: center;
+  word-break: keep-all;
 }
 
 .intro {
@@ -60,6 +61,7 @@ ul {
   font-weight: 600;
   width: 1000px;
   text-align: center;
+  word-break: keep-all;
 }
 
 .content {
