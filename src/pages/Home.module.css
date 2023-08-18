@@ -74,6 +74,7 @@ ul {
   border: 1px solid #f2f4f6;
   background: #f4f6ff;
   cursor: pointer;
+  position: relative;
 }
 
 .card:hover {
@@ -81,8 +82,12 @@ ul {
 }
 
 .card_text {
-  width: 240px;
-  padding: 20px;
+  width: 200px;
+  height: 42px;
+
+  position: absolute;
+  left: 20px;
+  top: 20px;
   font-size: 18px;
 }
 
